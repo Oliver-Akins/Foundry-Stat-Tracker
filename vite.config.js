@@ -23,6 +23,12 @@ function fileMarkerPlugin() {
 	};
 };
 
+/*
+The intent of this plugin is to make so that Rollup watches files
+that are not in the module graph (i.e. not imported in a JS file),
+allowing for rebuilds when the module's manifest changes, or when
+handlebars is updated.
+*/
 function watcher(...globs) {
 	return {
 		buildStart() {
@@ -44,7 +50,7 @@ export default defineConfig(({ mode }) => {
 	if (!isProd) {
 		plugins.push(
 			watcher(
-				`./public/module.json`,
+				`./public`,
 			),
 			fileMarkerPlugin(),
 		);
