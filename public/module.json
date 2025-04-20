@@ -1,0 +1,13 @@
+{
+	"id": "stat-tracker",
+	"title": "Stats Tracker",
+	"version": "0.0.1",
+	"compatibility": {
+		"maximum": 13,
+		"verified": 13,
+		"minimum": 13
+	},
+	"esmodules": [
+		"./module.mjs"
+	]
+}
