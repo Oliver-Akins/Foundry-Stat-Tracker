@@ -78,14 +78,6 @@ export default defineConfig(({ mode }) => {
 					format: `esm`,
 				},
 			},
-			watch: {
-				include: [
-					`module/**`,
-					`public/**`,
-				],
-				// skipWrite: false,
-				// onInvalidate: console.log
-			},
 			outDir: `${mode}.dist`,
 			emptyOutDir: true,
 		},
