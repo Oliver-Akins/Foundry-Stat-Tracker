@@ -43,12 +43,10 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 	async _onRender(context, options) {
 		await super._onRender(context, options);
 
-		const { parts } = options;
-
-		if (parts.includes(`tableSelect`)) {
-			this.element
-				.querySelector(`[data-application-part="tableSelect"] [data-bind]`)
-				?.addEventListener(`change`, this.#bindListener.bind(this));
+		const elements = this.element
+			.querySelectorAll(`[data-bind]`);
+		for (const input of elements) {
+			input.addEventListener(`change`, this.#bindListener.bind(this));
 		};
 	};
 
@@ -58,6 +56,10 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 		switch (partId) {
 			case `tableSelect`: {
 				this.#prepareTableSelectContext(ctx);
+				break;
+			};
+			case `dataFilters`: {
+				this.#prepareDataFiltersContext(ctx);
 				break;
 			};
 		};
@@ -99,6 +101,18 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 		ctx.subtables = subtableList;
 	};
 
+	_selectedUsers = [game.user.id];
+	async #prepareDataFiltersContext(ctx) {
+		ctx.users = [];
+		ctx.selectedUsers = this._selectedUsers;
+		for (const user of game.users) {
+			ctx.users.push({
+				label: user.name,
+				value: user.id,
+			});
+		};
+	};
+
 	/**
 	 * @param {Event} event
 	 */
@@ -108,6 +122,7 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 
 		const binding = data.bind;
 		if (!binding || !Object.hasOwn(this, binding)) {
+			Logger.debug(`Skipping change for element with binding "${binding}"`);
 			return;
 		};
 

@@ -1,3 +1,11 @@
 <div>
-	Data Filters
+	<div>
+		Extra Controls
+	</div>
+	{{!-- This currently doesn't support any placeholders :( --}}
+	<multi-select
+		data-bind="_selectedUsers"
+	>
+		{{ st-options selectedUsers users }}
+	</multi-select>
 </div>

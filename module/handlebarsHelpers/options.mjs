@@ -6,12 +6,15 @@
  */
 
 /**
- * @param {string | number} selected
+ * @param {string | number | string[] | number[]} selected
  * @param {Array<Option | string>} opts
  * @param {any} meta
  */
 export function options(selected, opts) {
-	selected = Handlebars.escapeExpression(selected);
+	if (!Array.isArray(selected)) {
+		selected = [selected];
+	};
+	// selected = selected.map(Handlebars.escapeExpression);
 	const htmlOptions = [];
 
 	for (let opt of opts) {
@@ -22,7 +25,7 @@ export function options(selected, opts) {
 		htmlOptions.push(
 			`<option
 				value="${opt.value}"
-				${selected === opt.value ? `selected` : ``}
+				${selected.includes(opt.value) ? `selected` : ``}
 				${opt.disabled ? `disabled` : ``}
 			>
 				${ opt.label }
