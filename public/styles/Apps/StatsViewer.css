@@ -1,0 +1,12 @@
+.stat-tracker.StatsViewer {
+
+	.window-content {
+		gap: 1rem;
+	}
+
+	[data-application-part="tableSelect"] {
+		display: flex;
+		flex-direction: row;
+		gap: 1rem;
+	}
+}

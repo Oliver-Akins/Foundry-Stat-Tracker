@@ -9,5 +9,11 @@
 	},
 	"esmodules": [
 		"./module.mjs"
+	],
+	"styles": [
+		{
+			"src": "styles/main.css",
+			"layer": "modules.stats-tracker"
+		}
 	]
 }

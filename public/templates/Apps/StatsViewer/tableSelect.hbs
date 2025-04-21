@@ -1,0 +1,14 @@
+<div>
+	<select
+		data-bind="_selectedTable"
+	>
+		{{ st-options table tables }}
+	</select>
+	{{#if subtables}}
+		<select
+			data-bind="_selectedSubtable"
+		>
+			{{ st-options subtable subtables }}
+		</select>
+	{{/if}}
+</div>
