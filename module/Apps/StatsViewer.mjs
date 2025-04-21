@@ -90,9 +90,11 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 		ctx.tables = tableList;
 
 		const subtableList = subtables[this._selectedTable];
-		if (subtableList && !subtableList.includes(this._selectedSubtable)) {
-			this._selectedSubtable = subtableList[0];
-		}
+		if (!subtableList) {
+			this._selectedSubtable = undefined;
+		} else if (!subtableList.includes(this._selectedSubtable)) {
+			this._selectedSubtable = subtableList?.[0];
+		};
 		ctx.subtable = this._selectedSubtable;
 		ctx.subtables = subtableList;
 	};
