@@ -69,6 +69,10 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 				this.#prepareDataFiltersContext(ctx);
 				break;
 			};
+			case `graph`: {
+				this.#prepareGraphContext(ctx);
+				break;
+			};
 		};
 
 		if (import.meta.env.DEV) {
@@ -118,6 +122,26 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 				value: user.id,
 			});
 		};
+	};
+
+	_graphData = {};
+	async #prepareGraphContext(_ctx) {
+		const datasets = CONFIG.StatsDatabase.getRows(
+			`${this._selectedTable}/${this._selectedSubtable}`,
+			this._selectedUsers,
+		);
+
+		Logger.log(datasets);
+
+		const buckets = {};
+		for (const row of datasets[game.user.id] ?? []) {
+			buckets[row.value] ??= 0;
+			buckets[row.value] += 1;
+		};
+
+		const sorted = Object.entries(buckets).sort(([v1], [v2]) => Math.sign(v1 - v2));
+
+		Logger.log(sorted);
 	};
 
 	/**
