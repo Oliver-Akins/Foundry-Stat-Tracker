@@ -43,6 +43,13 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 	async _onRender(context, options) {
 		await super._onRender(context, options);
 
+		/*
+		Removes the Foundry empty placeholder and allows my custom placeholder.
+		See: https://github.com/foundryvtt/foundryvtt/issues/12572
+		*/
+		this.element.querySelector(`multi-select option:first-child:empty`)
+			?.remove();
+
 		const elements = this.element
 			.querySelectorAll(`[data-bind]`);
 		for (const input of elements) {
