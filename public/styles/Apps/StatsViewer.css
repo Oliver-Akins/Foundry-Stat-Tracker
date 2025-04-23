@@ -17,5 +17,7 @@
 
 	[data-application-part="graph"] {
 		flex-grow: 1;
+		justify-items: center;
+		position: relative;
 	}
 }

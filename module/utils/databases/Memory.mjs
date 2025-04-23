@@ -52,13 +52,17 @@ export class MemoryDatabase {
 				if (!subtable) {
 					continue;
 				}
+
 				const size = Number.parseInt(subtable.slice(1));
 				const rows = [];
 
 				for (let i = 1; i <= size; i++) {
 					const count = getNormalDistributionHeight(i, size / 2, size);
-					console.table({ count, i });
-					const temp = new Array(count).fill(null).map(() => generateRow(i));
+					const temp = new Array(count)
+						.fill(null)
+						.map(() => generateRow(
+							game.user.id == user ? i : Math.ceil(Math.random() * size),
+						));
 					rows.push(...temp);
 				};
 

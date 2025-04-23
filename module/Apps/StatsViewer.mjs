@@ -1,5 +1,7 @@
+import { Chart } from "chart.js";
 import { filePath } from "../consts.mjs";
 import { Logger } from "../utils/Logger.mjs";
+import { smallToLarge } from "../utils/sorters/smallToLarge.mjs";
 
 const { HandlebarsApplicationMixin, ApplicationV2 } = foundry.applications.api;
 
@@ -19,7 +21,7 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 		},
 		position: {
 			width: 475,
-			height: 315,
+			height: 400,
 		},
 		actions: {},
 	};
@@ -54,6 +56,11 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 			.querySelectorAll(`[data-bind]`);
 		for (const input of elements) {
 			input.addEventListener(`change`, this.#bindListener.bind(this));
+		};
+
+		if (options.parts.includes(`graph`)) {
+			const canvas = this.element.querySelector(`canvas`);
+			new Chart( canvas, this._graphData );
 		};
 	};
 
@@ -126,22 +133,76 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 
 	_graphData = {};
 	async #prepareGraphContext(_ctx) {
-		const datasets = CONFIG.StatsDatabase.getRows(
+		const userData = CONFIG.StatsDatabase.getRows(
 			`${this._selectedTable}/${this._selectedSubtable}`,
 			this._selectedUsers,
 		);
 
-		Logger.log(datasets);
+		const data = {};
+		const allBuckets = new Set();
 
-		const buckets = {};
-		for (const row of datasets[game.user.id] ?? []) {
-			buckets[row.value] ??= 0;
-			buckets[row.value] += 1;
+		/*
+		When we're displaying data for a table within the Dice namespace, we want to
+		include all values that any user might not have rolled, just for completeness
+		since we do know exactly what labels to display, this might eventually be
+		replaced with a per-table configuration setting to determine what values are
+		populated within the graph and nothing else / prevent non-accepted values
+		from being added to the table in the first place.
+		*/
+		if (this._selectedTable === `Dice`) {
+			const size = Number.parseInt(this._selectedSubtable.slice(1));
+			for (let i = 1; i <= size; i++) {
+				allBuckets.add(i);
+			};
 		};
 
-		const sorted = Object.entries(buckets).sort(([v1], [v2]) => Math.sign(v1 - v2));
+		for (const user of this._selectedUsers) {
+			const buckets = {};
+			for (const row of userData[user] ?? []) {
+				buckets[row.value] ??= 0;
+				buckets[row.value] += 1;
+				allBuckets.add(row.value);
+			};
+			data[user] = buckets;
+		}
 
-		Logger.log(sorted);
+		const sortedBucketNames = Array.from(allBuckets).sort(smallToLarge);
+		const datasets = {};
+		for (const bucket of sortedBucketNames) {
+			for (const user of this._selectedUsers) {
+				datasets[user] ??= [];
+				datasets[user].push(data[user][bucket]);
+			};
+		};
+
+		this._graphData = {
+			type: `bar`,
+			options: {
+				scales: {
+					y: {
+						stacked: true,
+					},
+					x: {
+						stacked: true,
+					},
+				},
+			},
+			data: {
+				labels: sortedBucketNames,
+				datasets: Object.entries(datasets).map(([userID, values]) => {
+					const user = game.users.get(userID);
+					return {
+						label: user.name,
+						data: values,
+						borderColor: user.color.css,
+						backgroundColor: user.color.toRGBA(0.5),
+						borderWidth: 2,
+						borderRadius: 4,
+						borderSkipped: false,
+					};
+				}),
+			},
+		};
 	};
 
 	/**
@@ -160,17 +221,5 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 		Logger.log(`updating ${binding} value to ${target.value}`);
 		this[binding] = target.value;
 		this.render();
-		// this.#updatePartContainingElement(target);
-	};
-
-	/**
-	 * @param { HTMLElement } element
-	 */
-	#updatePartContainingElement(element) {
-		const partRoot = element.closest(`[data-application-part]`);
-		if (!partRoot) { return };
-		const data = partRoot.dataset;
-		const partId = data.applicationPart;
-		this.render({ parts: [partId] });
 	};
 };
