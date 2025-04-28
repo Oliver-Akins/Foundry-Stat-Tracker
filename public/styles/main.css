@@ -1,3 +1,5 @@
 @layer resets, elements, components, apps, exceptions;
 
+@import url("./elements/custom-multi-select.css") layer(elements);
+
 @import url("./Apps/StatsViewer.css") layer(apps);
