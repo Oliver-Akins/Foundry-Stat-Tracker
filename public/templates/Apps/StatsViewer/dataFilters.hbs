@@ -1,12 +1,19 @@
 <div>
-	<div>
-		Extra Controls
+	<div class="control-group">
+		<label for="{{meta.idp}}-private-data">
+			Private Data Visibility
+		</label>
+		<select
+			id="{{meta.idp}}-private-data"
+			data-bind="_privacySetting"
+		>
+			{{ st-options privacySetting privacyOptions }}
+		</select>
 	</div>
-	{{!-- This currently doesn't support any placeholders :( --}}
-	<multi-select
+	<stats-tracker-multi-select
 		data-bind="_selectedUsers"
+		placeholder="STAT_TRACKER.common.Users"
 	>
-		<option value="">Add a User</option>
 		{{ st-options selectedUsers users }}
-	</multi-select>
+	</stats-tracker-multi-select>
 </div>

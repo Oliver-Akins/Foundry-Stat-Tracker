@@ -1,14 +1,26 @@
 <div>
-	<select
-		data-bind="_selectedTable"
-	>
-		{{ st-options table tables }}
-	</select>
-	{{#if subtables}}
+	<div class="control-group">
+		<label for="{{meta.idp}}-selected-table">
+			{{ localize "STAT_TRACKER.common.Table" }}
+		</label>
 		<select
-			data-bind="_selectedSubtable"
+			id="{{meta.idp}}-selected-table"
+			data-bind="_selectedTable"
 		>
-			{{ st-options subtable subtables }}
+			{{ st-options table tables }}
 		</select>
+	</div>
+	{{#if subtables}}
+		<div class="control-group">
+			<label for="{{meta.idp}}-selected-subtable">
+				{{ localize "STAT_TRACKER.common.Subtable" }}
+			</label>
+			<select
+				id="{{meta.idp}}-selected-subtable"
+				data-bind="_selectedSubtable"
+			>
+				{{ st-options subtable subtables }}
+			</select>
+		</div>
 	{{/if}}
 </div>

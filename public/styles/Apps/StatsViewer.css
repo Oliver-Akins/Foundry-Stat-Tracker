@@ -1,5 +1,4 @@
 .stat-tracker.StatsViewer {
-
 	.window-content {
 		gap: 1rem;
 	}
@@ -8,16 +7,28 @@
 		display: flex;
 		flex-direction: row;
 		gap: 1rem;
+
+		> div {
+			width: 100%;
+		}
 	}
+
 	[data-application-part="dataFilters"] {
 		display: grid;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 		gap: 1rem;
+		align-items: end;
 	}
 
 	[data-application-part="graph"] {
 		flex-grow: 1;
 		justify-items: center;
 		position: relative;
+	}
+
+	.control-group {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
 	}
 }
