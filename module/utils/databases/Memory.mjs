@@ -1,82 +1,150 @@
 /* eslint-disable no-unused-vars */
-import { Table } from "./model.mjs";
+import { filterPrivateRows } from "../filterPrivateRows.mjs";
 
-const { randomID } = foundry.utils;
-
-function generateRow(value, isPrivate = false) {
-	return {
-		id: randomID(),
-		timestamp: Date.now(),
-		value,
-		isPrivate,
-	};
-};
-
-function getNormalDistributionHeight(x, a, b) {
-	const maxHeight = b;
-	return Math.round(Math.exp(-( ((x - a) ** 2) / b )) * maxHeight);
-};
+const { randomID, mergeObject } = foundry.utils;
 
 export class MemoryDatabase {
-	static getTables() {
-		/** @type {Array<{ name: string; }>} */
-		return [
-			{ name: `Dice/d4` },
-			{ name: `Dice/d6` },
-			{ name: `Dice/d8` },
-			{ name: `Dice/d10` },
-			{ name: `Dice/d12` },
-			{ name: `Dice/d20` },
-			{ name: `Dice/d100` },
-			{ name: `Count of Successes` },
-		];
+	static #tables = {
+		"Dice/d10": {
+			name: `Dice/d10`,
+			graphType: `bar`,
+			buckets: {
+				type: `range`,
+				min: 1,
+				max: 10,
+				step: 1,
+			},
+			config: {
+				stacked: true,
+			},
+		},
+		"Dice/d20": {
+			name: `Dice/d20`,
+			graphType: `bar`,
+			buckets: {
+				type: `range`,
+				min: 1,
+				max: 20,
+				step: 1,
+			},
+			config: {
+				stacked: true,
+			},
+		},
+		"Dice/d100": {
+			name: `Dice/d100`,
+			graphType: `bar`,
+			buckets: {
+				type: `range`,
+				min: 1,
+				max: 100,
+				step: 1,
+			},
+			config: {
+				stacked: true,
+			},
+		},
+		"Count of Successes": {
+			name: `Count of Successes`,
+			graphType: `bar`,
+			buckets: {
+				type: `number`,
+				min: 0,
+				step: 1,
+			},
+			config: {
+				stacked: true,
+			},
+		},
+		"Type of Result": {
+			name: `Type of Result`,
+			graphType: `bar`,
+			buckets: {
+				type: `string`,
+				trim: true, // forced true
+				blank: false, // forced false
+				textSearch: false, // forced false
+				choices: [`Normal`, `Popped Off`, `Downed`],
+			},
+			config: {
+				stacked: true,
+			},
+		},
 	};
 
-	static createRow(table, user, row) {};
+	static #rows = {};
 
-	static #cache = {};
+	static getTables() {
+		/** @type {Array<{ name: string; }>} */
+		return Object.values(this.#tables);
+	};
 
-	static getRows(tableID, users) {
-		if (users.length === 0) {
+	static getTable(tableID) {
+		return this.#tables[tableID];
+	};
+
+	static createRow(table, userID, row) {
+		if (!this.#tables[table]) { return };
+		this.#rows[userID] ??= {};
+		this.#rows[userID][table] ??= [];
+
+		// data format assertions
+		row._id ||= randomID();
+
+		this.#rows[userID][table].push(row);
+		this.render();
+	};
+
+	static getRows(tableID, userIDs, privacy = `none`) {
+		if (userIDs.length === 0) {
 			return {};
 		};
 
 		const datasets = {};
 
-		for (const user of users) {
-			if (this.#cache[user]?.[tableID]) {
-				datasets[user] = this.#cache[user][tableID];
-			} else {
-
-				const [table, subtable] = tableID.split(`/`);
-				if (!subtable) {
-					continue;
-				}
-
-				const size = Number.parseInt(subtable.slice(1));
-				const rows = [];
-
-				for (let i = 1; i <= size; i++) {
-					const count = getNormalDistributionHeight(i, size / 2, size);
-					const temp = new Array(count)
-						.fill(null)
-						.map(() => generateRow(
-							game.user.id == user ? i : Math.ceil(Math.random() * size),
-						));
-					rows.push(...temp);
-				};
-
-				this.#cache[user] ??= {};
-				datasets[user] = this.#cache[user][tableID] = rows;
-			}
+		for (const userID of userIDs) {
+			if (this.#rows[userID]?.[tableID]) {
+				datasets[userID] = filterPrivateRows(
+					this.#rows[userID][tableID] ?? [],
+					userID,
+					privacy,
+				);
+			};
 		}
 
 		return datasets;
 	};
 
-	static updateRow(table, user, rowId, changes) {};
+	static updateRow(table, userID, rowID, changes) {
+		if (!this.#tables[table] || !this.#rows[userID]?.[table]) { return };
+		let row = this.#rows[userID][table].find(row => row._id === rowID);
+		if (!row) { return };
+		mergeObject(row, changes);
+		this.render();
+	};
 
-	static deleteRow(table, user, rowId) {};
+	static deleteRow(table, userID, rowID) {
+		if (!this.#tables[table] || !this.#rows[userID]?.[table]) { return };
+		let rowIndex = this.#rows[userID][table].findIndex(row => row._id === rowID);
+		if (rowIndex === -1) { return };
+		this.#rows[userID][table].splice(rowIndex, 1);
+		this.render();
+	};
+
+	static apps = {};
+	static render() {
+		for (const app of Object.values(this.apps)) {
+			app.render();
+		};
+	};
+
+	/**
+	 * Used to listen for changes from other clients and refresh the local DB as
+	 * required, so that the StatsTracker stays up to date.
+	 */
+	static registerListeners() {};
+
+	static unregisterListeners() {};
 };
 
 /* eslint-enable no-unused-vars */
