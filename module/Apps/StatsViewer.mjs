@@ -18,12 +18,20 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 			positioned: true,
 			resizable: true,
 			minimizable: true,
+			controls: [
+				{
+					label: `Add All Users To Graph`,
+					action: `addAllUsers`,
+				},
+			],
 		},
 		position: {
 			width: 475,
-			height: 400,
+			height: 440,
 		},
-		actions: {},
+		actions: {
+			addAllUsers: this.#addAllUsers,
+		},
 	};
 
 	static PARTS = {
@@ -36,21 +44,30 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 		graph: {
 			template: filePath(`templates/Apps/StatsViewer/graph.hbs`),
 		},
-		tableOverview: {
-			template: filePath(`templates/Apps/StatsViewer/dataOverview.hbs`),
-		},
 	};
 	// #endregion
 
+	get activeTableID() {
+		if (this._selectedSubtable) {
+			return `${this._selectedTable}/${this._selectedSubtable}`;
+		}
+		return this._selectedTable;
+	};
+
+	async render({ userUpdated, ...opts } = {}) {
+		if (userUpdated && !this._selectedUsers.includes(userUpdated)) {
+			return;
+		}
+		await super.render(opts);
+	};
+
+	async _onFirstRender(context, options) {
+		await super._onFirstRender(context, options);
+		CONFIG.StatsDatabase.apps[this.id] = this;
+	};
+
 	async _onRender(context, options) {
 		await super._onRender(context, options);
-
-		/*
-		Removes the Foundry empty placeholder and allows my custom placeholder.
-		See: https://github.com/foundryvtt/foundryvtt/issues/12572
-		*/
-		this.element.querySelector(`multi-select option:first-child:empty`)
-			?.remove();
 
 		const elements = this.element
 			.querySelectorAll(`[data-bind]`);
@@ -66,6 +83,9 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 
 	async _preparePartContext(partId) {
 		const ctx = {};
+		ctx.meta = {
+			idp: this.id,
+		};
 
 		switch (partId) {
 			case `tableSelect`: {
@@ -129,13 +149,27 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 				value: user.id,
 			});
 		};
+
+		ctx.privacySetting = this._privacySetting;
+		ctx.privacyOptions = [
+			{ label: `Only Public Data`, value: `none` },
+			{ label: `Only Your Private Data`, value: `my` },
+		];
+		if (game.user.isGM) {
+			ctx.privacyOptions.push(
+				{ label: `All Private Data`, value: `all` },
+			);
+		};
 	};
 
 	_graphData = {};
+	_privacySetting = `my`;
 	async #prepareGraphContext(_ctx) {
+		const table = CONFIG.StatsDatabase.getTable(this.activeTableID);
 		const userData = CONFIG.StatsDatabase.getRows(
-			`${this._selectedTable}/${this._selectedSubtable}`,
+			this.activeTableID,
 			this._selectedUsers,
+			this._privacySetting,
 		);
 
 		const data = {};
@@ -171,19 +205,20 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 		for (const bucket of sortedBucketNames) {
 			for (const user of this._selectedUsers) {
 				datasets[user] ??= [];
-				datasets[user].push(data[user][bucket]);
+				datasets[user].push(data[user][bucket] ?? 0);
 			};
 		};
 
 		this._graphData = {
-			type: `bar`,
+			type: table.graphType,
 			options: {
+				animation: false,
 				scales: {
 					y: {
-						stacked: true,
+						stacked: table.config?.stacked ?? false,
 					},
 					x: {
-						stacked: true,
+						stacked: table.config?.stacked ?? false,
 					},
 				},
 			},
@@ -194,15 +229,14 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 					return {
 						label: user.name,
 						data: values,
+						borderWidth: 2,
 						borderColor: user.color.css,
 						backgroundColor: user.color.toRGBA(0.5),
-						borderWidth: 2,
-						borderRadius: 4,
-						borderSkipped: false,
 					};
 				}),
 			},
 		};
+		console.log(`graphData`, this._graphData);
 	};
 
 	/**
@@ -222,4 +256,7 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 		this[binding] = target.value;
 		this.render();
 	};
+
+	/** @this {StatsViewer} */
+	static async #addAllUsers() {};
 };
