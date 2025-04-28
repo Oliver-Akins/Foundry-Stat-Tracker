@@ -1,0 +1,9 @@
+{
+	"STAT_TRACKER": {
+		"common": {
+			"Table": "Table",
+			"Subtable": "Subtable",
+			"Users": "Users"
+		}
+	}
+}

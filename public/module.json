@@ -15,5 +15,12 @@
 			"src": "styles/main.css",
 			"layer": "modules.stats-tracker"
 		}
+	],
+	"languages": [
+		{
+			"lang": "en",
+			"name": "English (Canadian)",
+			"path": "langs/en-ca.json"
+		}
 	]
 }
