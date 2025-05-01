@@ -1,0 +1,21 @@
+.stats-sidebar {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+	padding: 1rem;
+
+	h4 {
+		margin: 0;
+	}
+
+	section {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.info {
+		display: flex;
+		justify-content: space-between;
+	}
+}

@@ -3,3 +3,4 @@
 @import url("./elements/custom-multi-select.css") layer(elements);
 
 @import url("./Apps/StatsViewer.css") layer(apps);
+@import url("./Apps/StatsSidebar.css") layer(apps);

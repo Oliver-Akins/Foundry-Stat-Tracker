@@ -3,10 +3,25 @@ import { Logger } from "../utils/Logger.mjs";
 import { MemoryDatabase } from "../utils/databases/Memory.mjs";
 import { registerCustomComponents } from "../Apps/elements/_index.mjs";
 import { registerMetaSettings } from "../settings/meta.mjs";
+import { StatSidebar } from "../Apps/StatSidebar.mjs";
 import { UserFlagDatabase } from "../utils/databases/UserFlag.mjs";
 
 Hooks.on(`init`, () => {
 	Logger.debug(`Initializing`);
+
+	// Add a custom sidebar tab for the module
+	CONFIG.ui.sidebar.TABS.stats = {
+		active: false,
+		icon: `fa-solid fa-chart-line`,
+		tooltip: `Stats!`,
+	};
+	CONFIG.ui.stats = StatSidebar;
+
+	// Inject the tab right before settings;
+	const temp = CONFIG.ui.sidebar.TABS.settings;
+	delete CONFIG.ui.sidebar.TABS.settings;
+	CONFIG.ui.sidebar.TABS.settings = temp;
+
 
 	registerMetaSettings();
 
