@@ -1,0 +1,30 @@
+<div class="group">
+	<label for="{{meta.idp}}-name">
+		Name
+	</label>
+	<input
+		id="{{meta.idp}}-name"
+		type="text"
+		value="{{ name }}"
+		data-bind="_name"
+	>
+</div>
+
+<div class="group">
+	<label for="{{meta.idp}}-type">
+		Type
+	</label>
+	<select
+		id="{{meta.idp}}-type"
+		data-bind="_type"
+	>
+		{{ st-options type types }}
+	</select>
+</div>
+
+<button
+	type="button"
+	data-action="createTable"
+>
+	Create Table
+</button>

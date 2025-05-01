@@ -1,0 +1,23 @@
+.TableCreator {
+	.window-content {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.group {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+		gap: 0.5rem;
+	}
+
+	label {
+		color: var(--color-form-label);
+		font-weight: bold;
+		line-height: var(--input-height);
+	}
+
+	button {
+		height: calc(1.25 * var(--input-height));
+	}
+}

@@ -26,8 +26,14 @@ export function validateValue(value, options) {
 	return !error;
 };
 
+export const BucketTypes = {
+	STRING: `string`,
+	NUMBER: `number`,
+	RANGE: `range`,
+};
+
 const validatorTypes = {
-	string: {
+	[BucketTypes.STRING]: {
 		field: StringField,
 		transformOptions: (opts) => {
 			delete opts.type;
@@ -40,20 +46,28 @@ const validatorTypes = {
 			};
 		},
 	},
-	number: {
+	[BucketTypes.NUMBER]: {
 		field: NumberField,
 		transformOptions: (opts) => {
 			delete opts.type;
 			opts.nullable = false;
 			opts.integer = true;
+			if (typeof opts.choices === `function`) {
+				Logger.error(`Choices cannot be a function in a table's buckets configuraion`);
+				delete opts.choices;
+			};
 		},
 	},
-	range: {
+	[BucketTypes.RANGE]: {
 		field: NumberField,
 		transformOptions: (opts) => {
 			delete opts.type;
 			opts.nullable = false;
 			opts.integer = true;
+			if (typeof opts.choices === `function`) {
+				Logger.error(`Choices cannot be a function in a table's buckets configuraion`);
+				delete opts.choices;
+			};
 		},
 	},
 };

@@ -4,3 +4,4 @@
 
 @import url("./Apps/StatsViewer.css") layer(apps);
 @import url("./Apps/StatsSidebar.css") layer(apps);
+@import url("./Apps/TableCreator.css") layer(apps);
