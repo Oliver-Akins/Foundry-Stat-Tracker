@@ -7,7 +7,6 @@ export class MemoryDatabase extends Database {
 	static #tables = {
 		"Dice/d10": {
 			name: `Dice/d10`,
-			graphType: `bar`,
 			buckets: {
 				type: `range`,
 				min: 1,
@@ -21,7 +20,6 @@ export class MemoryDatabase extends Database {
 		},
 		"Dice/d20": {
 			name: `Dice/d20`,
-			graphType: `bar`,
 			buckets: {
 				type: `range`,
 				min: 1,
@@ -34,7 +32,6 @@ export class MemoryDatabase extends Database {
 		},
 		"Dice/d100": {
 			name: `Dice/d100`,
-			graphType: `bar`,
 			buckets: {
 				type: `range`,
 				min: 1,
@@ -47,7 +44,6 @@ export class MemoryDatabase extends Database {
 		},
 		"Count of Successes": {
 			name: `Count of Successes`,
-			graphType: `bar`,
 			buckets: {
 				type: `number`,
 				min: 0,
@@ -59,7 +55,6 @@ export class MemoryDatabase extends Database {
 		},
 		"Type of Result": {
 			name: `Type of Result`,
-			graphType: `bar`,
 			buckets: {
 				type: `string`,
 				trim: true, // forced true
