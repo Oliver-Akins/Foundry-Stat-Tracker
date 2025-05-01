@@ -218,7 +218,7 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 		};
 
 		this._graphData = {
-			type: table.graphType,
+			type: table.graph.type,
 			options: {
 				// this must be true because it won't downsize the graph when false
 				maintainAspectRatio: true,
