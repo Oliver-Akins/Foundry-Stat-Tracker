@@ -47,6 +47,14 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 	};
 	// #endregion
 
+	constructor({ users, ...opts } = {}) {
+		super(opts);
+
+		if (users != null) {
+			this._selectedUsers = users;
+		};
+	};
+
 	get activeTableID() {
 		if (this._selectedSubtable) {
 			return `${this._selectedTable}/${this._selectedSubtable}`;
@@ -212,6 +220,8 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 		this._graphData = {
 			type: table.graphType,
 			options: {
+				// this must be true because it won't downsize the graph when false
+				maintainAspectRatio: true,
 				animation: false,
 				scales: {
 					y: {
