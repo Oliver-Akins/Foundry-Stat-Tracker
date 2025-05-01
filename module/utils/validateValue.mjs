@@ -3,7 +3,13 @@ import { Logger } from "./Logger.mjs";
 const { deepClone } = foundry.utils;
 const { StringField, NumberField } = foundry.data.fields;
 
+/**
+ * @param {unknown} value The value to validate
+ * @param {BucketConfig} options The bucket config for the table
+ * @returns Whether or not the value is valid for the table
+ */
 export function validateValue(value, options) {
+	/** @type {BucketConfig} */
 	let opts = deepClone(options);
 	if (validatorTypes[opts.type] == null) {
 		Logger.error(`Failed to find type validator for: ${opts.type}`);

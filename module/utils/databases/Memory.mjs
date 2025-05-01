@@ -1,9 +1,9 @@
-/* eslint-disable no-unused-vars */
+import { Database } from "./Database.mjs";
 import { filterPrivateRows } from "../filterPrivateRows.mjs";
 
 const { randomID, mergeObject } = foundry.utils;
 
-export class MemoryDatabase {
+export class MemoryDatabase extends Database {
 	static #tables = {
 		"Dice/d10": {
 			name: `Dice/d10`,
@@ -14,7 +14,8 @@ export class MemoryDatabase {
 				max: 10,
 				step: 1,
 			},
-			config: {
+			graph: {
+				type: `bar`,
 				stacked: true,
 			},
 		},
@@ -74,8 +75,8 @@ export class MemoryDatabase {
 
 	static #rows = {};
 
+	/** @returns {Array<Table>} */
 	static getTables() {
-		/** @type {Array<{ name: string; }>} */
 		return Object.values(this.#tables);
 	};
 
@@ -146,5 +147,3 @@ export class MemoryDatabase {
 
 	static unregisterListeners() {};
 };
-
-/* eslint-enable no-unused-vars */

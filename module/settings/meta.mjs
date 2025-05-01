@@ -1,9 +1,34 @@
+function createDiceTable(size) {
+	return {
+		name: `Dice/d${size}`,
+		buckets: {
+			type: `range`,
+			min: 1,
+			max: size,
+			step: 1,
+		},
+		graph: {
+			type: `bar`,
+			stacked: true,
+		},
+	};
+};
+
 export function registerMetaSettings() {
 	game.settings.register(__ID__, `tables`, {
 		scope: `world`,
-		type: Array,
+		type: Object,
 		config: false,
 		requiresReload: false,
+		default: {
+			"Dice/d4": createDiceTable(4),
+			"Dice/d6": createDiceTable(6),
+			"Dice/d8": createDiceTable(8),
+			"Dice/d10": createDiceTable(10),
+			"Dice/d12": createDiceTable(12),
+			"Dice/d20": createDiceTable(20),
+			"Dice/d100": createDiceTable(100),
+		},
 	});
 
 	game.settings.register(__ID__, `data`, {
