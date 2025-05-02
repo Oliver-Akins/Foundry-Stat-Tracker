@@ -26,7 +26,8 @@ export class MemoryDatabase extends Database {
 				max: 20,
 				step: 1,
 			},
-			config: {
+			graph: {
+				type: `bar`,
 				stacked: true,
 			},
 		},
@@ -38,7 +39,8 @@ export class MemoryDatabase extends Database {
 				max: 100,
 				step: 1,
 			},
-			config: {
+			graph: {
+				type: `bar`,
 				stacked: true,
 			},
 		},
@@ -49,7 +51,8 @@ export class MemoryDatabase extends Database {
 				min: 0,
 				step: 1,
 			},
-			config: {
+			graph: {
+				type: `bar`,
 				stacked: true,
 			},
 		},
@@ -62,7 +65,8 @@ export class MemoryDatabase extends Database {
 				textSearch: false, // forced false
 				choices: [`Normal`, `Popped Off`, `Downed`],
 			},
-			config: {
+			graph: {
+				type: `bar`,
 				stacked: true,
 			},
 		},
