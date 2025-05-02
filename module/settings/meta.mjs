@@ -1,18 +1,4 @@
-function createDiceTable(size) {
-	return {
-		name: `Dice/d${size}`,
-		buckets: {
-			type: `range`,
-			min: 1,
-			max: size,
-			step: 1,
-		},
-		graph: {
-			type: `bar`,
-			stacked: true,
-		},
-	};
-};
+import { createDiceTable } from "../utils/databases/utils.mjs";
 
 export function registerMetaSettings() {
 	game.settings.register(__ID__, `tables`, {

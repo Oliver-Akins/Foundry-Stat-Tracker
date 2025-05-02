@@ -1,4 +1,5 @@
 import { Chart } from "chart.js";
+import { diceSizeSorter } from "../utils/sorters/diceSize.mjs";
 import { filePath } from "../consts.mjs";
 import { Logger } from "../utils/Logger.mjs";
 import { smallToLarge } from "../utils/sorters/smallToLarge.mjs";
@@ -36,7 +37,7 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 
 	static PARTS = {
 		tableSelect: {
-			template: filePath(`templates/Apps/StatsViewer/tableSelect.hbs`),
+			template: filePath(`templates/Apps/common/tableSelect.hbs`),
 		},
 		dataFilters: {
 			template: filePath(`templates/Apps/StatsViewer/dataFilters.hbs`),
@@ -138,6 +139,14 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 		ctx.tables = tableList;
 
 		const subtableList = subtables[this._selectedTable];
+
+		// Sort the subtables to be sane
+		if (this._selectedTable === `Dice`) {
+			subtableList?.sort(diceSizeSorter);
+		} else {
+			subtableList?.sort(smallToLarge);
+		}
+
 		if (!subtableList) {
 			this._selectedSubtable = undefined;
 		} else if (!subtableList.includes(this._selectedSubtable)) {

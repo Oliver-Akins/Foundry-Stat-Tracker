@@ -1,4 +1,5 @@
 import { BucketTypes } from "../utils/validateValue.mjs";
+import { createDiceTable } from "../utils/databases/utils.mjs";
 import { filePath } from "../consts.mjs";
 import { Logger } from "../utils/Logger.mjs";
 
@@ -20,7 +21,7 @@ export class TableCreator extends HandlebarsApplicationMixin(ApplicationV2) {
 		},
 		position: {
 			width: 320,
-			height: 206,
+			height: `auto`,
 		},
 		actions: {
 			createTable: this.#createTable,
@@ -52,9 +53,12 @@ export class TableCreator extends HandlebarsApplicationMixin(ApplicationV2) {
 		};
 	};
 
+	/** @type {string} */
 	_name = ``;
+	/** @type {string} */
 	_type = BucketTypes.NUMBER;
-	async _preparePartContext(partId) {
+	#diceNamespaceAlert = null;
+	async _preparePartContext() {
 		const ctx = {};
 		ctx.meta = {
 			idp: this.id,
@@ -62,7 +66,20 @@ export class TableCreator extends HandlebarsApplicationMixin(ApplicationV2) {
 
 		ctx.name = this._name;
 		ctx.type = this._type;
+		ctx.typeDisabled = false;
 		ctx.types = Object.values(BucketTypes);
+
+		// Special Case for the dice namespace
+		if (this._name.startsWith(`Dice`)) {
+			ctx.typeDisabled = true;
+			ctx.type = BucketTypes.RANGE;
+			this.#diceNamespaceAlert = ui.notifications.info(
+				`Tables in the "Dice" namespace must be formatted as "Dice/dX" where X is the number of sides on the die and are restricted to be ranges 1 to X.`,
+				{ permanent: true },
+			);
+		} else if (this.#diceNamespaceAlert != null) {
+			ui.notifications.remove(this.#diceNamespaceAlert);
+		};
 
 		if (import.meta.env.DEV) {
 			Logger.log(`Context`, ctx);
@@ -89,8 +106,25 @@ export class TableCreator extends HandlebarsApplicationMixin(ApplicationV2) {
 	};
 
 	static async #createTable() {
-		if (this._name === ``) {
+		/** @type {string} */
+		const name = this._name;
+		if (name === ``) {
 			ui.notifications.error(`Cannot create a table without a name`);
+		};
+
+		const existing = CONFIG.StatsDatabase.getTable(name);
+		if (existing) {
+			ui.notifications.error(`A table with the name "${name}" already exists`);
+		};
+
+		if (name.startsWith(`Dice`)) {
+			if (!name.match(/^Dice\/d[0-9]+$/)) {
+				ui.notifications.error(`Table name doesn't conform to the "Dice/dX" format required by the Dice namespace.`);
+				return;
+			};
+			const size = Number(name.replace(`Dice/d`, ``));
+			CONFIG.StatsDatabase.createTable(createDiceTable(size));
+			return;
 		};
 	};
 };

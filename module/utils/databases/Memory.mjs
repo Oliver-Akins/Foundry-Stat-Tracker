@@ -74,6 +74,10 @@ export class MemoryDatabase extends Database {
 
 	static #rows = {};
 
+	static createTable(tableConfig) {
+		this.#tables[tableConfig.name] = tableConfig;
+	};
+
 	/** @returns {Array<Table>} */
 	static getTables() {
 		return Object.values(this.#tables);
