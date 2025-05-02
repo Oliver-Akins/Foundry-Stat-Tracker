@@ -19,19 +19,13 @@
 </section>
 
 <section>
-	<h4 class="divider">Apps</h4>
-	<button
-		type="button"
-		data-action="openStats"
-	>
-		View Statistics
-	</button>
-	<button
-		type="button"
-		data-action="createTable"
-	>
-		Create New Table
-	</button>
-	<button type="button">Manage Tables</button>
-	<button type="button">Manage Rows</button>
+	<h4 class="divider">Controls</h4>
+	{{#each controls as | btn |}}
+		<button
+			type="button"
+			data-action="{{ btn.action }}"
+		>
+			{{ btn.label }}
+		</button>
+	{{/each}}
 </section>

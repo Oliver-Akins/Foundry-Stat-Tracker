@@ -38,6 +38,26 @@ export class StatSidebar extends HandlebarsApplicationMixin(AbstractSidebarTab) 
 
 		ctx.tableCount = db.getTables().length;
 
+		const controls = {
+			openStats: { label: `View Stats`, action: `openStats` },
+			createTable: { label: `Create New Table`, action: `createTable` },
+			manageTables: { label: `Manage Tables`, action: `` },
+			manageData: { label: `Manage Data`, action: `` },
+		};
+
+		if (!game.user.isGM) {
+			delete controls.createTable;
+			delete controls.manageTables;
+		};
+
+		const canManageTheirOwnData = false;
+		if (!game.user.isGM && !canManageTheirOwnData) {
+			delete controls.manageData;
+		};
+
+		Hooks.callAll(`${__ID__}.getStatsSidebarControls`, controls);
+		ctx.controls = Object.values(controls);
+
 		return ctx;
 	};
 
