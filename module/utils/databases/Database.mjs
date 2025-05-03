@@ -3,7 +3,20 @@
 export class Database {
 	// MARK: Table Ops
 	static createTable(tableConfig) {
-		throw new Error(`createTable() must be defined`);
+		if (!game.user.isGM) {
+			ui.notifications.error(`You do not have the required permission to create a new table`);
+			return false;
+		};
+
+		const tables = game.settings.get(__ID__, `tables`);
+		if (tables[tableConfig.name]) {
+			ui.notifications.error(`Cannot create table that already exists`);
+			return false;
+		};
+
+		tables[tableConfig.name] = tableConfig;
+		game.settings.set(__ID__, `tables`, tables);
+		return true;
 	};
 
 	/** @returns {Array<Table>} */
@@ -19,7 +32,20 @@ export class Database {
 	};
 
 	static deleteTable(tableID) {
-		throw new Error(`deleteTable() must be defined`);
+		if (!game.user.isGM) {
+			ui.notifications.error(`You do not have the required permission to delete a table`);
+			return false;
+		};
+
+		const tables = game.settings.get(__ID__, `tables`);
+		if (!tables[tableID]) {
+			ui.notifications.error(`Cannot delete a table that doesn't exist`);
+			return false;
+		};
+
+		delete tables[tableID];
+		game.settings.set(__ID__, `tables`, tables);
+		return true;
 	};
 
 	// MARK: Row Ops
