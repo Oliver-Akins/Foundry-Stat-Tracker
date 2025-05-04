@@ -5,6 +5,8 @@ import { Logger } from "../utils/Logger.mjs";
 
 const { HandlebarsApplicationMixin, ApplicationV2 } = foundry.applications.api;
 
+const diceNamespacePattern = /^Dice\/d[0-9]+$/;
+
 export class TableCreator extends HandlebarsApplicationMixin(ApplicationV2) {
 	// #region Options
 	static DEFAULT_OPTIONS = {
@@ -29,7 +31,7 @@ export class TableCreator extends HandlebarsApplicationMixin(ApplicationV2) {
 	};
 
 	static PARTS = {
-		tableSelect: {
+		content: {
 			template: filePath(`templates/Apps/TableCreator.hbs`),
 			root: true,
 		},
@@ -71,14 +73,16 @@ export class TableCreator extends HandlebarsApplicationMixin(ApplicationV2) {
 
 		// Special Case for the dice namespace
 		if (this._name.startsWith(`Dice`)) {
+			ctx.createButtonDisabled = !this._name.match(diceNamespacePattern);
 			ctx.typeDisabled = true;
 			ctx.type = BucketTypes.RANGE;
-			this.#diceNamespaceAlert = ui.notifications.info(
+			this.#diceNamespaceAlert ??= ui.notifications.info(
 				`Tables in the "Dice" namespace must be formatted as "Dice/dX" where X is the number of sides on the die and are restricted to be ranges 1 to X.`,
 				{ permanent: true },
 			);
 		} else if (this.#diceNamespaceAlert != null) {
 			ui.notifications.remove(this.#diceNamespaceAlert);
+			this.#diceNamespaceAlert = null;
 		};
 
 		if (import.meta.env.DEV) {
@@ -115,10 +119,11 @@ export class TableCreator extends HandlebarsApplicationMixin(ApplicationV2) {
 		const existing = CONFIG.stats.db.getTable(name);
 		if (existing) {
 			ui.notifications.error(`A table with the name "${name}" already exists`);
+			return;
 		};
 
 		if (name.startsWith(`Dice`)) {
-			if (!name.match(/^Dice\/d[0-9]+$/)) {
+			if (!name.match(diceNamespacePattern)) {
 				ui.notifications.error(`Table name doesn't conform to the "Dice/dX" format required by the Dice namespace.`);
 				return;
 			};
@@ -126,5 +131,16 @@ export class TableCreator extends HandlebarsApplicationMixin(ApplicationV2) {
 			CONFIG.stats.db.createTable(createDiceTable(size));
 			return;
 		};
+
+		CONFIG.stats.db.createTable({
+			name,
+			buckets: {
+				type: this._type,
+			},
+			graph: {
+				type: `bar`,
+				stacked: true,
+			},
+		});
 	};
 };
