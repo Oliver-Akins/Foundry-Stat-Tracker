@@ -8,14 +8,27 @@ export class Database {
 			return false;
 		};
 
+		const name = tableConfig.name;
+		if (name.split(`/`).length > 2) {
+			ui.notifications.error(`Subtables are not able to have subtables`);
+			return false;
+		}
+
 		const tables = game.settings.get(__ID__, `tables`);
-		if (tables[tableConfig.name]) {
+		const [ table, subtable ] = name.split(`/`);
+		if (subtable && tables[table]) {
+			ui.notifications.error(`Cannot add subtable for a table that already exists`);
+			return false;
+		}
+
+		if (tables[name]) {
 			ui.notifications.error(`Cannot create table that already exists`);
 			return false;
 		};
 
-		tables[tableConfig.name] = tableConfig;
+		tables[name] = tableConfig;
 		game.settings.set(__ID__, `tables`, tables);
+		this.render();
 		return true;
 	};
 
@@ -96,9 +109,9 @@ export class Database {
 	 * Rerenders all of the applications that are displaying data from
 	 * this database
 	 */
-	static render() {
-		for (const app of Object.values(this.apps)) {
-			app.render();
+	static render(opts) {
+		for (const app of this._apps.values()) {
+			app.render(opts);
 		};
 	};
 
