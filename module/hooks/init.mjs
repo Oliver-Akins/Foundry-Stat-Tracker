@@ -4,6 +4,8 @@ import { MemoryDatabase } from "../utils/databases/Memory.mjs";
 import { registerCustomComponents } from "../Apps/elements/_index.mjs";
 import { registerMetaSettings } from "../settings/meta.mjs";
 import { StatSidebar } from "../Apps/StatSidebar.mjs";
+import { StatsViewer } from "../Apps/StatsViewer.mjs";
+import { TableCreator } from "../Apps/TableCreator.mjs";
 import { UserFlagDatabase } from "../utils/databases/UserFlag.mjs";
 
 Hooks.on(`init`, () => {
@@ -22,13 +24,16 @@ Hooks.on(`init`, () => {
 	delete CONFIG.ui.sidebar.TABS.settings;
 	CONFIG.ui.sidebar.TABS.settings = temp;
 
-
 	registerMetaSettings();
 
-	if (import.meta.env.PROD) {
-		CONFIG.StatsDatabase = UserFlagDatabase;
-	} else {
-		CONFIG.StatsDatabase = MemoryDatabase;
+	CONFIG.stats = {
+		db: UserFlagDatabase,
+		viewer: StatsViewer,
+		creator: TableCreator,
+	};
+
+	if (import.meta.env.DEV) {
+		CONFIG.stats.db = MemoryDatabase;
 	}
 
 	Handlebars.registerHelper(helpers);

@@ -1,6 +1,4 @@
 import { filePath } from "../consts.mjs";
-import { StatsViewer } from "./StatsViewer.mjs";
-import { TableCreator } from "./TableCreator.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { AbstractSidebarTab } = foundry.applications.sidebar;
@@ -34,7 +32,7 @@ export class StatSidebar extends HandlebarsApplicationMixin(AbstractSidebarTab) 
 
 	async _prepareContext(options) {
 		const ctx = await super._prepareContext(options);
-		const db = CONFIG.StatsDatabase;
+		const db = CONFIG.stats.db;
 
 		ctx.tableCount = db.getTables().length;
 
@@ -63,13 +61,13 @@ export class StatSidebar extends HandlebarsApplicationMixin(AbstractSidebarTab) 
 
 	/** @this {StatSidebar} */
 	static async #openStats() {
-		const app = new StatsViewer();
+		const app = new CONFIG.stats.viewer;
 		app.render({ force: true });
 	};
 
 	/** @this {StatSidebar} */
 	static async #createTable() {
-		const app = new TableCreator;
+		const app = new CONFIG.stats.creator;
 		app.render({ force: true });
 	};
 };

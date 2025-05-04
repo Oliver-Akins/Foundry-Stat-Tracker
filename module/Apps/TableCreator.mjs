@@ -112,7 +112,7 @@ export class TableCreator extends HandlebarsApplicationMixin(ApplicationV2) {
 			ui.notifications.error(`Cannot create a table without a name`);
 		};
 
-		const existing = CONFIG.StatsDatabase.getTable(name);
+		const existing = CONFIG.stats.db.getTable(name);
 		if (existing) {
 			ui.notifications.error(`A table with the name "${name}" already exists`);
 		};
@@ -123,7 +123,7 @@ export class TableCreator extends HandlebarsApplicationMixin(ApplicationV2) {
 				return;
 			};
 			const size = Number(name.replace(`Dice/d`, ``));
-			CONFIG.StatsDatabase.createTable(createDiceTable(size));
+			CONFIG.stats.db.createTable(createDiceTable(size));
 			return;
 		};
 	};

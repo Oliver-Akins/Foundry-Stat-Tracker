@@ -72,7 +72,7 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 
 	async _onFirstRender(context, options) {
 		await super._onFirstRender(context, options);
-		CONFIG.StatsDatabase.addApp(this);
+		CONFIG.stats.db.addApp(this);
 	};
 
 	async _onRender(context, options) {
@@ -123,7 +123,7 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 		const tables = new Set();
 		const subtables = {};
 
-		for (const tableConfig of CONFIG.StatsDatabase.getTables()) {
+		for (const tableConfig of CONFIG.stats.db.getTables()) {
 			const [ table, subtable ] = tableConfig.name.split(`/`);
 			tables.add(table);
 			if (subtable?.length > 0) {
@@ -182,8 +182,8 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 	_graphData = {};
 	_privacySetting = `my`;
 	async #prepareGraphContext(_ctx) {
-		const table = CONFIG.StatsDatabase.getTable(this.activeTableID);
-		const userData = CONFIG.StatsDatabase.getRows(
+		const table = CONFIG.stats.db.getTable(this.activeTableID);
+		const userData = CONFIG.stats.db.getRows(
 			this.activeTableID,
 			this._selectedUsers,
 			this._privacySetting,
