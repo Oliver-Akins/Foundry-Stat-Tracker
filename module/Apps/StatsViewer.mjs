@@ -72,7 +72,7 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 
 	async _onFirstRender(context, options) {
 		await super._onFirstRender(context, options);
-		CONFIG.StatsDatabase.apps[this.id] = this;
+		CONFIG.StatsDatabase.addApp(this);
 	};
 
 	async _onRender(context, options) {

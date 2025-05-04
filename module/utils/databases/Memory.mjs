@@ -76,6 +76,8 @@ export class MemoryDatabase extends Database {
 
 	static createTable(tableConfig) {
 		this.#tables[tableConfig.name] = tableConfig;
+		this.render();
+		return true;
 	};
 
 	/** @returns {Array<Table>} */
@@ -96,7 +98,7 @@ export class MemoryDatabase extends Database {
 		row._id ||= randomID();
 
 		this.#rows[userID][table].push(row);
-		this.render();
+		this.render({ userUpdated: userID });
 	};
 
 	static getRows(tableID, userIDs, privacy = `none`) {
@@ -124,7 +126,7 @@ export class MemoryDatabase extends Database {
 		let row = this.#rows[userID][table].find(row => row._id === rowID);
 		if (!row) { return };
 		mergeObject(row, changes);
-		this.render();
+		this.render({ userUpdated: userID });
 	};
 
 	static deleteRow(table, userID, rowID) {
@@ -132,14 +134,7 @@ export class MemoryDatabase extends Database {
 		let rowIndex = this.#rows[userID][table].findIndex(row => row._id === rowID);
 		if (rowIndex === -1) { return };
 		this.#rows[userID][table].splice(rowIndex, 1);
-		this.render();
-	};
-
-	static apps = {};
-	static render() {
-		for (const app of Object.values(this.apps)) {
-			app.render();
-		};
+		this.render({ userUpdated: userID });
 	};
 
 	/**
