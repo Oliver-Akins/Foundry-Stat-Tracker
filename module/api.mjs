@@ -1,5 +1,6 @@
 // Apps
 import { StatsViewer } from "./Apps/StatsViewer.mjs";
+import { TableCreator } from "./Apps/TableCreator.mjs";
 import { TestApp } from "./Apps/TestApp.mjs";
 
 // Utils
@@ -16,6 +17,7 @@ Object.defineProperty(
 			Apps: {
 				TestApp,
 				StatsViewer,
+				TableCreator,
 			},
 			utils: {
 				filterPrivateRows,
