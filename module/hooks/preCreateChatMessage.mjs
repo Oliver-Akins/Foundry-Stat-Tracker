@@ -3,7 +3,8 @@ import { determinePrivacyFromRollMode } from "../utils/privacy.mjs";
 Hooks.on(`preCreateChatMessage`, (_message, context, options, author) => {
 	const isNew = options.action === `create`;
 	const hasRolls = context.rolls?.length > 0;
-	if (!isNew || !hasRolls) { return };
+	const autoTracking = game.settings.get(__ID__, `autoTrackRolls`);
+	if (!isNew || !hasRolls || !autoTracking) { return };
 
 	/** An object of dice denomination to rows to add */
 	const rows = {};

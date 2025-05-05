@@ -3,6 +3,7 @@ import { Logger } from "../utils/Logger.mjs";
 import { MemoryDatabase } from "../utils/databases/Memory.mjs";
 import { registerCustomComponents } from "../Apps/elements/_index.mjs";
 import { registerMetaSettings } from "../settings/meta.mjs";
+import { registerWorldSettings } from "../settings/world.mjs";
 import { StatSidebar } from "../Apps/StatSidebar.mjs";
 import { StatsViewer } from "../Apps/StatsViewer.mjs";
 import { TableCreator } from "../Apps/TableCreator.mjs";
@@ -25,6 +26,7 @@ Hooks.on(`init`, () => {
 	CONFIG.ui.sidebar.TABS.settings = temp;
 
 	registerMetaSettings();
+	registerWorldSettings();
 
 	CONFIG.stats = {
 		db: UserFlagDatabase,
