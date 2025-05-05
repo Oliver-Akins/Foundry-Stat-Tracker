@@ -62,8 +62,12 @@ export class Database {
 	};
 
 	// MARK: Row Ops
-	static createRow(table, userID, row) {
+	static createRow(table, userID, row, opts) {
 		throw new Error(`createRow() must be implemented`);
+	};
+
+	static createRows(table, userID, rows, opts) {
+		throw new Error(`createRows() must be implemented`);
 	};
 
 	static getRows(tableID, userIDs, privacy = `none`) {

@@ -1,5 +1,6 @@
 import { Database } from "./Database.mjs";
-import { filterPrivateRows } from "../filterPrivateRows.mjs";
+import { filterPrivateRows } from "../privacy.mjs";
+import { Logger } from "../Logger.mjs";
 
 const { randomID, mergeObject } = foundry.utils;
 
@@ -89,16 +90,35 @@ export class MemoryDatabase extends Database {
 		return this.#tables[tableID];
 	};
 
-	static createRow(table, userID, row) {
+	static createRow(table, userID, row, { rerender = true } = {}) {
 		if (!this.#tables[table]) { return };
 		this.#rows[userID] ??= {};
 		this.#rows[userID][table] ??= [];
 
 		// data format assertions
 		row._id ||= randomID();
+		row.timestamp = new Date().toISOString();
 
+		Logger.debug(`Adding row:`, row);
 		this.#rows[userID][table].push(row);
-		this.render({ userUpdated: userID });
+		if (rerender) {
+			this.render({ userUpdated: userID });
+		};
+	};
+
+	static createRows(table, userID, rows, { rerender = true } = {}) {
+		if (!this.#tables[table]) { return };
+		this.#rows[userID] ??= {};
+		this.#rows[userID][table] ??= [];
+
+		// data format assertions
+		for (const row of rows) {
+			this.createRow( table, userID, row, { rerender: false } );
+		};
+
+		if (rerender) {
+			this.render({ userUpdated: userID });
+		};
 	};
 
 	static getRows(tableID, userIDs, privacy = `none`) {
