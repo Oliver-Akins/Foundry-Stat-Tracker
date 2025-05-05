@@ -4,7 +4,7 @@ import { TableCreator } from "./Apps/TableCreator.mjs";
 import { TestApp } from "./Apps/TestApp.mjs";
 
 // Utils
-import { filterPrivateRows } from "./utils/filterPrivateRows.mjs";
+import { filterPrivateRows } from "./utils/privacy.mjs";
 import { validateValue } from "./utils/validateValue.mjs";
 
 const { deepFreeze } = foundry.utils;
