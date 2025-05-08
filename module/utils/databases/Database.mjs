@@ -1,5 +1,29 @@
 /* eslint-disable no-unused-vars */
 
+/*
+NOTE:
+This database design currently does not support anything like a default subtable
+or nested tables more than 1-layer deep. These limitations are currently intentional
+and if the desire for those functionalities is requested, this is some information
+on how they can be implemented.
+
+Tables >= 1 layer deep:
+	Adding a "parent" property to each table that accepts a table's ID, there will
+	need to be a defined table at the specified ID, and each table's ID should no
+	longer contain the parent table(s) within it (e.g. "Dice/d4" -> "d4"). This
+	could also be made in such a way where any buckets/graph settings on the parent
+	are applied to the subtable when it is created. The primary unknown with this
+	idea is what do we do when someone has a table like "Dice/d4" and then attempts
+	to make a subtable "Dice/d4/crits" or something like that.
+
+Default Subtables:
+	This would require a partial implementation similar to the Tables >= 1 layer
+	deep, however each table would accept an "options" top level property that accepts
+	a "defaultSubtable" property specifying the ID of the subtable that should be
+	selected by default, this defaultSubtable property would *only* be valid on
+	tables that are parents to other tables.
+*/
+
 export class Database {
 	// MARK: Table Ops
 	static createTable(tableConfig) {
