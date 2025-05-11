@@ -1,0 +1,57 @@
+<div class="{{#if buckets.locked}}alert-box locked{{/if}}">
+	{{#if buckets.locked}}
+		<p class="center">
+			This bucket configuration has been locked, preventing editing
+			of the settings.
+		</p>
+	{{/if}}
+	<div class="input-group">
+		<label for="{{meta.idp}}-min">
+			Minimum
+		</label>
+		<input
+			id="{{meta.idp}}-min"
+			type="number"
+			name="buckets.min"
+			value="{{ buckets.min }}"
+			{{disabled buckets.locked}}
+		>
+		<p class="hint">
+			The minimum allowed value. Leave empty for no minimum.
+		</p>
+	</div>
+	<div class="input-group">
+		<label for="{{meta.idp}}-max">
+			Maximum
+		</label>
+		<input
+			id="{{meta.idp}}-max"
+			type="number"
+			name="buckets.max"
+			value="{{ buckets.max }}"
+			{{disabled buckets.locked}}
+		>
+		<p class="hint">
+			The maximum allowed value. Leave empty for no maximum.
+		</p>
+	</div>
+	<div class="input-group">
+		<label for="{{meta.idp}}-step">
+			Step
+		</label>
+		<input
+			id="{{meta.idp}}-min"
+			type="number"
+			name="buckets.step"
+			value="{{ buckets.step }}"
+			minimum="1"
+			placeholder="1"
+			{{disabled buckets.locked}}
+		>
+		<p class="hint">
+			The step value, if a minimum is not provided this will not be
+			saved and the existing value will be removed from the saved
+			configuration.
+		</p>
+	</div>
+</div>

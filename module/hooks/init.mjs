@@ -1,13 +1,19 @@
-import helpers from "../handlebarsHelpers/_index.mjs";
-import { Logger } from "../utils/Logger.mjs";
+// Databases
 import { MemoryDatabase } from "../utils/databases/Memory.mjs";
-import { registerCustomComponents } from "../Apps/elements/_index.mjs";
-import { registerMetaSettings } from "../settings/meta.mjs";
-import { registerWorldSettings } from "../settings/world.mjs";
+import { UserFlagDatabase } from "../utils/databases/UserFlag.mjs";
+
+// Applications
 import { StatSidebar } from "../Apps/StatSidebar.mjs";
 import { StatsViewer } from "../Apps/StatsViewer.mjs";
 import { TableCreator } from "../Apps/TableCreator.mjs";
-import { UserFlagDatabase } from "../utils/databases/UserFlag.mjs";
+import { TableManager } from "../Apps/TableManager.mjs";
+
+// Misc Imports
+import helpers from "../handlebarsHelpers/_index.mjs";
+import { Logger } from "../utils/Logger.mjs";
+import { registerCustomComponents } from "../Apps/elements/_index.mjs";
+import { registerMetaSettings } from "../settings/meta.mjs";
+import { registerWorldSettings } from "../settings/world.mjs";
 
 Hooks.on(`init`, () => {
 	Logger.debug(`Initializing`);
@@ -32,6 +38,7 @@ Hooks.on(`init`, () => {
 		db: UserFlagDatabase,
 		viewer: StatsViewer,
 		creator: TableCreator,
+		manager: TableManager,
 	};
 
 	if (import.meta.env.DEV) {

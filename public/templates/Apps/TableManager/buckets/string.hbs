@@ -1,0 +1,17 @@
+<div class="{{#if buckets.locked}}alert-box locked{{/if}}">
+	<div class="input-group">
+		<label for="">
+			Valid Options
+		</label>
+		<string-tags
+			name="buckets.choices"
+			value="{{ buckets.choices }}"
+		></string-tags>
+		<p class="hint">
+			These are the only values that are allowed to be provided to
+			the database and are case-sensitive. Leave this empty to
+			allow any string to be valid. Empty strings are never valid and
+			extra spaces are removed the start and end of the options.
+		</p>
+	</div>
+</div>

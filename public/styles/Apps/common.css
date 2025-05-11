@@ -1,0 +1,21 @@
+.stat-tracker {
+	[data-application-part="tableSelect"] {
+		display: flex;
+		flex-direction: row;
+		gap: 1rem;
+
+		> div {
+			width: 100%;
+		}
+	}
+
+	.control-group {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+	}
+
+	.st-scrollable {
+		overflow: auto;
+	}
+}

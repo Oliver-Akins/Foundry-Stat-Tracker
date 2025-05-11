@@ -15,6 +15,7 @@ export class StatSidebar extends HandlebarsApplicationMixin(AbstractSidebarTab) 
 		},
 		actions: {
 			openStats: this.#openStats,
+			manageTables: this.#manageTables,
 			createTable: this.#createTable,
 		},
 	};
@@ -39,7 +40,7 @@ export class StatSidebar extends HandlebarsApplicationMixin(AbstractSidebarTab) 
 		const controls = {
 			openStats: { label: `View Stats`, action: `openStats` },
 			createTable: { label: `Create New Table`, action: `createTable` },
-			manageTables: { label: `Manage Tables`, action: `` },
+			manageTables: { label: `Manage Tables`, action: `manageTables` },
 			manageData: { label: `Manage Data`, action: `` },
 		};
 
@@ -62,6 +63,12 @@ export class StatSidebar extends HandlebarsApplicationMixin(AbstractSidebarTab) 
 	/** @this {StatSidebar} */
 	static async #openStats() {
 		const app = new CONFIG.stats.viewer;
+		app.render({ force: true });
+	};
+
+	/** @this {StatSidebar} */
+	static async #manageTables() {
+		const app = new CONFIG.stats.manager;
 		app.render({ force: true });
 	};
 

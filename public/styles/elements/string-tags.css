@@ -1,0 +1,13 @@
+.stat-tracker string-tags {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	gap: 4px;
+
+	> .tags {
+		grid-column: 1 / -1;
+	}
+
+	> button {
+		height: 100%;
+	}
+}

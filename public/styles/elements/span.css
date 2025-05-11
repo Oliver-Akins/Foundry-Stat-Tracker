@@ -1,0 +1,5 @@
+.stat-tracker span {
+	&.large {
+		font-size: var(--font-size-24);
+	}
+}

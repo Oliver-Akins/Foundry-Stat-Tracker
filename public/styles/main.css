@@ -1,7 +1,12 @@
-@layer resets, elements, components, apps, exceptions;
+@layer resets, elements, components, partials, apps, exceptions;
 
 @import url("./elements/custom-multi-select.css") layer(elements);
+@import url("./elements/string-tags.css") layer(elements);
+@import url("./elements/span.css") layer(elements);
+
+@import url("./Apps/common.css") layer(partials);
 
 @import url("./Apps/StatsViewer.css") layer(apps);
 @import url("./Apps/StatsSidebar.css") layer(apps);
 @import url("./Apps/TableCreator.css") layer(apps);
+@import url("./Apps/TableManager.css") layer(apps);

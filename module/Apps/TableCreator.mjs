@@ -1,4 +1,4 @@
-import { BucketTypes } from "../utils/validateValue.mjs";
+import { BucketTypes } from "../utils/buckets.mjs";
 import { createDiceTable } from "../utils/databases/utils.mjs";
 import { filePath } from "../consts.mjs";
 import { Logger } from "../utils/Logger.mjs";

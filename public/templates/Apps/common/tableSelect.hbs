@@ -7,6 +7,7 @@
 			id="{{meta.idp}}-selected-table"
 			data-bind="_selectedTable"
 		>
+			<option value="">Select a Table</option>
 			{{ st-options table tables }}
 		</select>
 	</div>
@@ -19,6 +20,7 @@
 				id="{{meta.idp}}-selected-subtable"
 				data-bind="_selectedSubtable"
 			>
+				<option value="">Select a Subtable</option>
 				{{ st-options subtable subtables }}
 			</select>
 		</div>

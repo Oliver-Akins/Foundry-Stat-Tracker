@@ -1,8 +1,9 @@
 import { Database } from "./Database.mjs";
 import { filterPrivateRows } from "../privacy.mjs";
 import { Logger } from "../Logger.mjs";
+import { validateBucketConfig } from "../buckets.mjs";
 
-const { randomID, mergeObject } = foundry.utils;
+const { deleteProperty, diffObject, expandObject, mergeObject, randomID } = foundry.utils;
 
 export class MemoryDatabase extends Database {
 	static #tables = {
@@ -10,6 +11,7 @@ export class MemoryDatabase extends Database {
 			name: `Dice/d10`,
 			buckets: {
 				type: `range`,
+				locked: true,
 				min: 1,
 				max: 10,
 				step: 1,
@@ -23,6 +25,7 @@ export class MemoryDatabase extends Database {
 			name: `Dice/d20`,
 			buckets: {
 				type: `range`,
+				locked: true,
 				min: 1,
 				max: 20,
 				step: 1,
@@ -36,6 +39,7 @@ export class MemoryDatabase extends Database {
 			name: `Dice/d100`,
 			buckets: {
 				type: `range`,
+				locked: true,
 				min: 1,
 				max: 100,
 				step: 1,
@@ -45,11 +49,23 @@ export class MemoryDatabase extends Database {
 				stacked: true,
 			},
 		},
-		"Count of Successes": {
-			name: `Count of Successes`,
+		"Successes Number": {
+			name: `Successes Number`,
 			buckets: {
 				type: `number`,
 				min: 0,
+			},
+			graph: {
+				type: `bar`,
+				stacked: true,
+			},
+		},
+		"Successes Range": {
+			name: `Successes Range`,
+			buckets: {
+				type: `range`,
+				min: 0,
+				max: 100,
 				step: 1,
 			},
 			graph: {
@@ -61,9 +77,6 @@ export class MemoryDatabase extends Database {
 			name: `Type of Result`,
 			buckets: {
 				type: `string`,
-				trim: true, // forced true
-				blank: false, // forced false
-				textSearch: false, // forced false
 				choices: [`Normal`, `Popped Off`, `Downed`],
 			},
 			graph: {
@@ -81,6 +94,26 @@ export class MemoryDatabase extends Database {
 		return true;
 	};
 
+	static getTableNames() {
+		const tables = new Set();
+		for (const tableID of Object.keys(this.#tables)) {
+			const [ targetTable ] = tableID.split(`/`, 2);
+			tables.add(targetTable);
+		};
+		return Array.from(tables);
+	};
+
+	static getSubtableNames(table) {
+		const subtables = new Set();
+		for (const tableID of Object.keys(this.#tables)) {
+			const [ targetTable, targetSubtable ] = tableID.split(`/`, 2);
+			if (targetTable === table) {
+				subtables.add(targetSubtable);
+			}
+		};
+		return Array.from(subtables);
+	};
+
 	/** @returns {Array<Table>} */
 	static getTables() {
 		return Object.values(this.#tables);
@@ -88,6 +121,39 @@ export class MemoryDatabase extends Database {
 
 	static getTable(tableID) {
 		return this.#tables[tableID];
+	};
+
+	static async updateTable(tableID, changes) {
+		Logger.debug({tableID, changes});
+		const table = this.getTable(tableID);
+		if (!table) { return false };
+
+		// Bucket coercion in case called via the API
+		deleteProperty(changes, `name`);
+		deleteProperty(changes, `buckets.type`);
+
+		const diff = diffObject(
+			table,
+			expandObject(changes),
+			{ inner: true, deletionKeys: true },
+		);
+		if (Object.keys(diff).length === 0) { return false };
+
+		const updated = mergeObject(
+			table,
+			diff,
+			{ inplace: false, performDeletions: true },
+		);
+
+		try {
+			updated.buckets = validateBucketConfig(updated.buckets);
+		} catch (e) {
+			ui.notifications.error(e);
+			return false;
+		};
+
+		this.#tables[tableID] = updated;
+		return true;
 	};
 
 	static createRow(table, userID, row, { rerender = true } = {}) {

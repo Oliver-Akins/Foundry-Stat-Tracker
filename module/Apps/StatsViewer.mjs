@@ -117,8 +117,16 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 		return ctx;
 	};
 
-	_selectedTable;
-	_selectedSubtable;
+	#_selectedTable = ``;
+	_selectedSubtable = ``;
+	get _selectedTable() {
+		return this.#_selectedTable;
+	};
+	set _selectedTable(val) {
+		this.#_selectedTable = val;
+		this._selectedSubtable = ``;
+	};
+
 	async #prepareTableSelectContext(ctx) {
 		const tables = new Set();
 		const subtables = {};
@@ -264,15 +272,12 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 	async #bindListener(event) {
 		const target = event.target;
 		const data = target.dataset;
-
 		const binding = data.bind;
-		if (!binding || !Object.hasOwn(this, binding)) {
-			Logger.debug(`Skipping change for element with binding "${binding}"`);
-			return;
-		};
 
-		Logger.log(`updating ${binding} value to ${target.value}`);
-		this[binding] = target.value;
+		if (import.meta.env.DEV) {
+			Logger.debug(`updating ${binding} value to ${target.value}`);
+		}
+		Reflect.set(this, binding, target.value);
 		this.render();
 	};
 
