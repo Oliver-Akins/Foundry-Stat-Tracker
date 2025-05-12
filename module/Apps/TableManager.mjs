@@ -1,3 +1,4 @@
+import { BucketTypes } from "../utils/buckets.mjs";
 import { diceSizeSorter } from "../utils/sorters/diceSize.mjs";
 import { filePath } from "../consts.mjs";
 import { Logger } from "../utils/Logger.mjs";
@@ -42,22 +43,17 @@ export class TableManager extends HandlebarsApplicationMixin(ApplicationV2) {
 			template: filePath(`templates/Apps/common/tableSelect.hbs`),
 		},
 		buckets: {
-			template: filePath(`templates/Apps/TableManager/buckets/empty.hbs`),
+			template: filePath(`templates/Apps/TableManager/buckets.hbs`),
+			templates: [
+				filePath(`templates/Apps/TableManager/buckets/empty.hbs`),
+				...Object.values(BucketTypes).map(
+					(bucketType) => filePath(`templates/Apps/TableManager/buckets/${bucketType}.hbs`),
+				),
+			],
 		},
 		submit: {
 			template: filePath(`templates/Apps/TableManager/submit.hbs`),
 		},
-	};
-
-	_configureRenderOptions(options) {
-		const table = CONFIG.stats.db.getTable(this.activeTableID);
-
-		let bucketType = table?.buckets?.type ?? `empty`;
-		this.constructor.PARTS.buckets = {
-			template: filePath(`templates/Apps/TableManager/buckets/${bucketType}.hbs`),
-		};
-
-		super._configureRenderOptions(options);
 	};
 	// #endregion Options
 
@@ -84,7 +80,7 @@ export class TableManager extends HandlebarsApplicationMixin(ApplicationV2) {
 	async render({ userUpdated, ...opts } = {}) {
 		if (userUpdated) {
 			return;
-		}
+		};
 		await super.render(opts);
 	};
 
@@ -140,7 +136,7 @@ export class TableManager extends HandlebarsApplicationMixin(ApplicationV2) {
 		const tables = new Set();
 		const subtables = {};
 
-		for (const tableConfig of CONFIG.stats.db.getTables()) {
+		for (const tableConfig of await CONFIG.stats.db.getTables()) {
 			const [ table, subtable ] = tableConfig.name.split(`/`);
 			tables.add(table);
 			if (subtable?.length > 0) {
@@ -167,35 +163,46 @@ export class TableManager extends HandlebarsApplicationMixin(ApplicationV2) {
 	};
 
 	async #prepareBucketContext(ctx) {
-		const table = CONFIG.stats.db.getTable(this.activeTableID);
-		if (!table) { return };
-		const type = table.buckets.type;
+		const table = await CONFIG.stats.db.getTable(this.activeTableID);
+		const type = table?.buckets?.type ?? `empty`;
+
+		const template = filePath(`templates/Apps/TableManager/buckets/${type}.hbs`);
+		ctx.buckets = {
+			locked: false,
+			template,
+			classes: ``,
+		};
+
+		if (!table) {
+			ctx.buckets.classes = `alert-box warning center`;
+			return;
+		};
+
+		const locked = this._selectedTable === `Dice` || table.buckets.locked;
+		ctx.buckets.locked = locked;
+		if (locked) {
+			ctx.buckets.classes = `alert-box locked`;
+		};
+
 		const capitalizedType = type[0].toUpperCase() + type.slice(1);
 		if (!this[`_prepare${capitalizedType}Context`]) { return };
 		this[`_prepare${capitalizedType}Context`](ctx, table);
 	};
 
 	async _prepareNumberContext(ctx, table) {
-		ctx.buckets = {
-			min: table.buckets.min,
-			max: table.buckets.max,
-			step: table.buckets.step,
-		};
+		ctx.buckets.min = table.buckets.min;
+		ctx.buckets.max = table.buckets.max;
+		ctx.buckets.step = table.buckets.step;
 	};
 
 	async _prepareRangeContext(ctx, table) {
-		ctx.buckets = {
-			locked: this._selectedTable === `Dice` || table.buckets.locked,
-			min: table.buckets.min,
-			max: table.buckets.max,
-			step: table.buckets.step,
-		};
+		ctx.buckets.min = table.buckets.min;
+		ctx.buckets.max = table.buckets.max;
+		ctx.buckets.step = table.buckets.step;
 	};
 
 	async _prepareStringContext(ctx, table) {
-		ctx.buckets = {
-			choices: [...table.buckets.choices],
-		};
+		ctx.buckets.choices = [...table.buckets.choices];
 	};
 	// #endregion Data Prep
 
@@ -230,7 +237,7 @@ export class TableManager extends HandlebarsApplicationMixin(ApplicationV2) {
 			ui.notifications.info(`Nothing to save`);
 			return;
 		}
-		CONFIG.stats.db.updateTable(this.activeTableID, formData.object);
+		await CONFIG.stats.db.updateTable(this.activeTableID, formData.object);
 	};
 	// #endregion Actions
 };

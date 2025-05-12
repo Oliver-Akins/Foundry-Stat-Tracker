@@ -1,50 +1,42 @@
-<div class="{{#if buckets.locked}}alert-box locked{{/if}}">
-	{{#if buckets.locked}}
-		<p class="center">
-			This bucket configuration has been locked, preventing editing
-			of the settings.
-		</p>
-	{{/if}}
-	<div class="input-group">
-		<label for="{{meta.idp}}-min">
-			Minimum
-		</label>
-		<input
-			id="{{meta.idp}}-min"
-			type="number"
-			name="buckets.min"
-			value="{{ buckets.min }}"
-			required
-			{{disabled buckets.locked}}
-		>
-	</div>
-	<div class="input-group">
-		<label for="{{meta.idp}}-max">
-			Maximum
-		</label>
-		<input
-			id="{{meta.idp}}-max"
-			type="number"
-			name="buckets.max"
-			value="{{ buckets.max }}"
-			required
-			{{disabled buckets.locked}}
-		>
-	</div>
-	<div class="input-group">
-		<label for="{{meta.idp}}-step">
-			Step
-		</label>
-		<input
-			id="{{meta.idp}}-step"
-			type="number"
-			name="buckets.step"
-			value="{{ buckets.step }}"
-			required
-			{{disabled buckets.locked}}
-		>
-		<p class="hint">
-			The size of the step between values within the range.
-		</p>
-	</div>
+<div class="input-group">
+	<label for="{{meta.idp}}-min">
+		Minimum
+	</label>
+	<input
+		id="{{meta.idp}}-min"
+		type="number"
+		name="buckets.min"
+		value="{{ buckets.min }}"
+		required
+		{{disabled buckets.locked}}
+	>
+</div>
+<div class="input-group">
+	<label for="{{meta.idp}}-max">
+		Maximum
+	</label>
+	<input
+		id="{{meta.idp}}-max"
+		type="number"
+		name="buckets.max"
+		value="{{ buckets.max }}"
+		required
+		{{disabled buckets.locked}}
+	>
+</div>
+<div class="input-group">
+	<label for="{{meta.idp}}-step">
+		Step
+	</label>
+	<input
+		id="{{meta.idp}}-step"
+		type="number"
+		name="buckets.step"
+		value="{{ buckets.step }}"
+		required
+		{{disabled buckets.locked}}
+	>
+	<p class="hint">
+		The size of the step between values within the range.
+	</p>
 </div>

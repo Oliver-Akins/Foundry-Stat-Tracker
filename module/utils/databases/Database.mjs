@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { validateBucketConfig } from "../buckets.mjs";
 
 /*
 NOTE:
@@ -24,9 +25,11 @@ Default Subtables:
 	tables that are parents to other tables.
 */
 
+const { deleteProperty, diffObject, expandObject, mergeObject } = foundry.utils;
+
 export class Database {
 	// MARK: Table Ops
-	static createTable(tableConfig) {
+	static async createTable(tableConfig) {
 		if (!game.user.isGM) {
 			ui.notifications.error(`You do not have the required permission to create a new table`);
 			return false;
@@ -52,23 +55,61 @@ export class Database {
 
 		tables[name] = tableConfig;
 		game.settings.set(__ID__, `tables`, tables);
-		this.render();
+		this.render({ tags: [`table`] });
 		return true;
 	};
 
 	/** @returns {Array<Table>} */
-	static getTables() {
+	static async getTables() {
 		const tables = game.settings.get(__ID__, `tables`);
 		return Object.values(tables) ?? [];
 	};
 
-	static getTable(tableID) {
+	static async getTable(tableID) {
 		const tables = game.settings.get(__ID__, `tables`);
 		if (!tables[tableID]) { return };
 		return tables[tableID];
 	};
 
-	static deleteTable(tableID) {
+	static async updateTable(tableID, changes) {
+		const table = this.getTable(tableID);
+		if (!tables[tableID]) {
+			ui.notifications.error(`Cannot update table that doesn't exist`);
+			return false;
+		};
+
+		// Bucket coercion in case called via the API
+		deleteProperty(changes, `name`);
+		deleteProperty(changes, `buckets.type`);
+
+		const diff = diffObject(
+			table,
+			expandObject(changes),
+			{ inner: true, deletionKeys: true },
+		);
+		if (Object.keys(diff).length === 0) { return false };
+
+		const updated = mergeObject(
+			table,
+			diff,
+			{ inplace: false, performDeletions: true },
+		);
+
+		try {
+			updated.buckets = validateBucketConfig(updated.buckets);
+		} catch (e) {
+			ui.notifications.error(e);
+			return false;
+		};
+
+		const tables = game.settings.get(__ID__, `tables`);
+		tables[tableID] = updated;
+		game.settings.set(__ID__, `tables`, tables);
+		this.render({ tags: [`table`] });
+		return true;
+	};
+
+	static async deleteTable(tableID) {
 		if (!game.user.isGM) {
 			ui.notifications.error(`You do not have the required permission to delete a table`);
 			return false;
@@ -86,23 +127,23 @@ export class Database {
 	};
 
 	// MARK: Row Ops
-	static createRow(table, userID, row, opts) {
+	static async createRow(table, userID, row, opts) {
 		throw new Error(`createRow() must be implemented`);
 	};
 
-	static createRows(table, userID, rows, opts) {
+	static async createRows(table, userID, rows, opts) {
 		throw new Error(`createRows() must be implemented`);
 	};
 
-	static getRows(tableID, userIDs, privacy = `none`) {
+	static async getRows(tableID, userIDs, privacy = `none`) {
 		throw new Error(`getRows() must be implemented`);
 	};
 
-	static updateRow(table, userID, rowID, changes) {
+	static async updateRow(table, userID, rowID, changes) {
 		throw new Error(`updateRow() must be implemented`);
 	};
 
-	static deleteRow(table, userID, rowID) {
+	static async deleteRow(table, userID, rowID) {
 		throw new Error(`deleteRow() must be implemented`);
 	};
 
@@ -137,7 +178,7 @@ export class Database {
 	 * Rerenders all of the applications that are displaying data from
 	 * this database
 	 */
-	static render(opts) {
+	static async render(opts) {
 		for (const app of this._apps.values()) {
 			app.render(opts);
 		};
@@ -148,9 +189,9 @@ export class Database {
 	 * Used to listen for changes from other clients and rerender the apps
 	 * as required in order to keep the data as up-to-date as possible.
 	 */
-	static registerListeners() {};
+	static async registerListeners() {};
 
-	static unregisterListeners() {};
+	static async unregisterListeners() {};
 };
 
 /* eslint-enable no-unused-vars */

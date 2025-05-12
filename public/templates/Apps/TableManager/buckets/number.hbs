@@ -1,4 +1,7 @@
-<div class="{{#if buckets.locked}}alert-box locked{{/if}}">
+<div
+	class="{{#if buckets.locked}}alert-box locked{{/if}}"
+	data-bucket-type="number"
+>
 	{{#if buckets.locked}}
 		<p class="center">
 			This bucket configuration has been locked, preventing editing

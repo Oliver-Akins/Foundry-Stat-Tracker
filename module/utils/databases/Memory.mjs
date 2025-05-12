@@ -1,3 +1,4 @@
+import { createDiceTable } from "./utils.mjs";
 import { Database } from "./Database.mjs";
 import { filterPrivateRows } from "../privacy.mjs";
 import { Logger } from "../Logger.mjs";
@@ -7,48 +8,9 @@ const { deleteProperty, diffObject, expandObject, mergeObject, randomID } = foun
 
 export class MemoryDatabase extends Database {
 	static #tables = {
-		"Dice/d10": {
-			name: `Dice/d10`,
-			buckets: {
-				type: `range`,
-				locked: true,
-				min: 1,
-				max: 10,
-				step: 1,
-			},
-			graph: {
-				type: `bar`,
-				stacked: true,
-			},
-		},
-		"Dice/d20": {
-			name: `Dice/d20`,
-			buckets: {
-				type: `range`,
-				locked: true,
-				min: 1,
-				max: 20,
-				step: 1,
-			},
-			graph: {
-				type: `bar`,
-				stacked: true,
-			},
-		},
-		"Dice/d100": {
-			name: `Dice/d100`,
-			buckets: {
-				type: `range`,
-				locked: true,
-				min: 1,
-				max: 100,
-				step: 1,
-			},
-			graph: {
-				type: `bar`,
-				stacked: true,
-			},
-		},
+		"Dice/d10": createDiceTable(10),
+		"Dice/d20": createDiceTable(20),
+		"Dice/d100": createDiceTable(100),
 		"Successes Number": {
 			name: `Successes Number`,
 			buckets: {
@@ -88,13 +50,13 @@ export class MemoryDatabase extends Database {
 
 	static #rows = {};
 
-	static createTable(tableConfig) {
+	static async createTable(tableConfig) {
 		this.#tables[tableConfig.name] = tableConfig;
 		this.render();
 		return true;
 	};
 
-	static getTableNames() {
+	static async getTableNames() {
 		const tables = new Set();
 		for (const tableID of Object.keys(this.#tables)) {
 			const [ targetTable ] = tableID.split(`/`, 2);
@@ -103,7 +65,7 @@ export class MemoryDatabase extends Database {
 		return Array.from(tables);
 	};
 
-	static getSubtableNames(table) {
+	static async getSubtableNames(table) {
 		const subtables = new Set();
 		for (const tableID of Object.keys(this.#tables)) {
 			const [ targetTable, targetSubtable ] = tableID.split(`/`, 2);
@@ -115,16 +77,15 @@ export class MemoryDatabase extends Database {
 	};
 
 	/** @returns {Array<Table>} */
-	static getTables() {
+	static async getTables() {
 		return Object.values(this.#tables);
 	};
 
-	static getTable(tableID) {
+	static async getTable(tableID) {
 		return this.#tables[tableID];
 	};
 
 	static async updateTable(tableID, changes) {
-		Logger.debug({tableID, changes});
 		const table = this.getTable(tableID);
 		if (!table) { return false };
 
@@ -156,7 +117,7 @@ export class MemoryDatabase extends Database {
 		return true;
 	};
 
-	static createRow(table, userID, row, { rerender = true } = {}) {
+	static async createRow(table, userID, row, { rerender = true } = {}) {
 		if (!this.#tables[table]) { return };
 		this.#rows[userID] ??= {};
 		this.#rows[userID][table] ??= [];
@@ -172,7 +133,7 @@ export class MemoryDatabase extends Database {
 		};
 	};
 
-	static createRows(table, userID, rows, { rerender = true } = {}) {
+	static async createRows(table, userID, rows, { rerender = true } = {}) {
 		if (!this.#tables[table]) { return };
 		this.#rows[userID] ??= {};
 		this.#rows[userID][table] ??= [];
@@ -187,7 +148,7 @@ export class MemoryDatabase extends Database {
 		};
 	};
 
-	static getRows(tableID, userIDs, privacy = `none`) {
+	static async getRows(tableID, userIDs, privacy = `none`) {
 		if (userIDs.length === 0) {
 			return {};
 		};
@@ -207,7 +168,7 @@ export class MemoryDatabase extends Database {
 		return datasets;
 	};
 
-	static updateRow(table, userID, rowID, changes) {
+	static async updateRow(table, userID, rowID, changes) {
 		if (!this.#tables[table] || !this.#rows[userID]?.[table]) { return };
 		let row = this.#rows[userID][table].find(row => row._id === rowID);
 		if (!row) { return };
@@ -215,7 +176,7 @@ export class MemoryDatabase extends Database {
 		this.render({ userUpdated: userID });
 	};
 
-	static deleteRow(table, userID, rowID) {
+	static async deleteRow(table, userID, rowID) {
 		if (!this.#tables[table] || !this.#rows[userID]?.[table]) { return };
 		let rowIndex = this.#rows[userID][table].findIndex(row => row._id === rowID);
 		if (rowIndex === -1) { return };
@@ -227,7 +188,7 @@ export class MemoryDatabase extends Database {
 	 * Used to listen for changes from other clients and refresh the local DB as
 	 * required, so that the StatsTracker stays up to date.
 	 */
-	static registerListeners() {};
+	static async registerListeners() {};
 
-	static unregisterListeners() {};
+	static async unregisterListeners() {};
 };

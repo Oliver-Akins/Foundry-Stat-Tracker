@@ -131,7 +131,7 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 		const tables = new Set();
 		const subtables = {};
 
-		for (const tableConfig of CONFIG.stats.db.getTables()) {
+		for (const tableConfig of await CONFIG.stats.db.getTables()) {
 			const [ table, subtable ] = tableConfig.name.split(`/`);
 			tables.add(table);
 			if (subtable?.length > 0) {
@@ -190,8 +190,8 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 	_graphData = {};
 	_privacySetting = `my`;
 	async #prepareGraphContext(_ctx) {
-		const table = CONFIG.stats.db.getTable(this.activeTableID);
-		const userData = CONFIG.stats.db.getRows(
+		const table = await CONFIG.stats.db.getTable(this.activeTableID);
+		const userData = await CONFIG.stats.db.getRows(
 			this.activeTableID,
 			this._selectedUsers,
 			this._privacySetting,

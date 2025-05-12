@@ -35,7 +35,7 @@ export class StatSidebar extends HandlebarsApplicationMixin(AbstractSidebarTab) 
 		const ctx = await super._prepareContext(options);
 		const db = CONFIG.stats.db;
 
-		ctx.tableCount = db.getTables().length;
+		ctx.tableCount = (await db.getTables()).length;
 
 		const controls = {
 			openStats: { label: `View Stats`, action: `openStats` },

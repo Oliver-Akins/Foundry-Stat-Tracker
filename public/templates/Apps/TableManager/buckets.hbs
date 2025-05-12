@@ -1,0 +1,9 @@
+<div class="{{buckets.classes}}">
+	{{#if buckets.locked}}
+		<p class="center">
+			This bucket configuration has been locked, preventing editing
+			of the settings.
+		</p>
+	{{/if}}
+	{{> (lookup buckets "template") }}
+</div>

@@ -116,7 +116,7 @@ export class TableCreator extends HandlebarsApplicationMixin(ApplicationV2) {
 			ui.notifications.error(`Cannot create a table without a name`);
 		};
 
-		const existing = CONFIG.stats.db.getTable(name);
+		const existing = await CONFIG.stats.db.getTable(name);
 		if (existing) {
 			ui.notifications.error(`A table with the name "${name}" already exists`);
 			return;
@@ -128,11 +128,11 @@ export class TableCreator extends HandlebarsApplicationMixin(ApplicationV2) {
 				return;
 			};
 			const size = Number(name.replace(`Dice/d`, ``));
-			CONFIG.stats.db.createTable(createDiceTable(size));
+			await CONFIG.stats.db.createTable(createDiceTable(size));
 			return;
 		};
 
-		CONFIG.stats.db.createTable({
+		await CONFIG.stats.db.createTable({
 			name,
 			buckets: {
 				type: this._type,
