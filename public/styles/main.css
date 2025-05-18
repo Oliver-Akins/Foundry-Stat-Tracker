@@ -1,8 +1,11 @@
 @layer resets, elements, components, partials, apps, exceptions;
 
+@import url("./resets/classes.css") layer(resets);
+
 @import url("./elements/custom-multi-select.css") layer(elements);
 @import url("./elements/string-tags.css") layer(elements);
 @import url("./elements/span.css") layer(elements);
+@import url("./elements/div.css") layer(elements);
 
 @import url("./Apps/common.css") layer(partials);
 
