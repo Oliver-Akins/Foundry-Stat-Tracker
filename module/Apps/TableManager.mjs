@@ -57,7 +57,7 @@ export class TableManager extends HandlebarsApplicationMixin(ApplicationV2) {
 	};
 	// #endregion Options
 
-	// #region Selected Table
+	// #region Instance Data
 	#_selectedTable = ``;
 	_selectedSubtable = ``;
 	get _selectedTable() {
@@ -74,7 +74,7 @@ export class TableManager extends HandlebarsApplicationMixin(ApplicationV2) {
 		}
 		return this._selectedTable;
 	};
-	// #endregion Selected Table
+	// #endregion Instance Data
 
 	// #region Lifecycle
 	async render({ userUpdated, ...opts } = {}) {
