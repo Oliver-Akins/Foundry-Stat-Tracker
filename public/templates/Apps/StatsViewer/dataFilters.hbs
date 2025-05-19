@@ -1,15 +1,10 @@
 <div>
-	<div class="control-group">
-		<label for="{{meta.idp}}-private-data">
-			Private Data Visibility
-		</label>
-		<select
-			id="{{meta.idp}}-private-data"
-			data-bind="_privacySetting"
-		>
-			{{ st-options privacySetting privacyOptions }}
-		</select>
-	</div>
+	<stats-tracker-multi-select
+		data-bind="_privacySetting"
+		placeholder="STAT_TRACKER.common.DataVisibility"
+	>
+		{{ st-options privacySetting privacyOptions }}
+	</stats-tracker-multi-select>
 	<stats-tracker-multi-select
 		data-bind="_selectedUsers"
 		placeholder="STAT_TRACKER.common.Users"

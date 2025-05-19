@@ -2,6 +2,7 @@ import { Chart } from "chart.js";
 import { diceSizeSorter } from "../utils/sorters/diceSize.mjs";
 import { filePath } from "../consts.mjs";
 import { Logger } from "../utils/Logger.mjs";
+import { PrivacyMode } from "../utils/privacy.mjs";
 import { smallToLarge } from "../utils/sorters/smallToLarge.mjs";
 
 const { HandlebarsApplicationMixin, ApplicationV2 } = foundry.applications.api;
@@ -48,12 +49,30 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 	};
 	// #endregion
 
-	constructor({ users, ...opts } = {}) {
+	// #region Instance Data
+	constructor({ users, privacy, ...opts } = {}) {
 		super(opts);
 
 		if (users != null) {
 			this._selectedUsers = users;
 		};
+		if (privacy != null && Array.isArray(privacy)) {
+			this._privacySetting = privacy;
+		};
+	};
+
+	_selectedUsers = [game.user.id];
+	_graphData = null;
+	_privacySetting = [PrivacyMode.PUBLIC, PrivacyMode.PRIVATE];
+
+	#_selectedTable = ``;
+	_selectedSubtable = ``;
+	get _selectedTable() {
+		return this.#_selectedTable;
+	};
+	set _selectedTable(val) {
+		this.#_selectedTable = val;
+		this._selectedSubtable = ``;
 	};
 
 	get activeTableID() {
@@ -62,7 +81,9 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 		}
 		return this._selectedTable;
 	};
+	// #endregion Instance Data
 
+	// #region Lifecycle
 	async render({ userUpdated, ...opts } = {}) {
 		if (userUpdated && !this._selectedUsers.includes(userUpdated)) {
 			return;
@@ -84,14 +105,19 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 			input.addEventListener(`change`, this.#bindListener.bind(this));
 		};
 
-		if (options.parts.includes(`graph`)) {
+		if (options.parts.includes(`graph`) && this._graphData) {
 			const canvas = this.element.querySelector(`canvas`);
 			new Chart( canvas, this._graphData );
 		};
 	};
+	// #endregion Lifecycle
 
+	// #region Data Prep
 	async _preparePartContext(partId) {
-		const ctx = {};
+		const ctx = {
+			table: this._selectedTable,
+			subtable: this._selectedSubtable,
+		};
 		ctx.meta = {
 			idp: this.id,
 		};
@@ -117,16 +143,6 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 		return ctx;
 	};
 
-	#_selectedTable = ``;
-	_selectedSubtable = ``;
-	get _selectedTable() {
-		return this.#_selectedTable;
-	};
-	set _selectedTable(val) {
-		this.#_selectedTable = val;
-		this._selectedSubtable = ``;
-	};
-
 	async #prepareTableSelectContext(ctx) {
 		const tables = new Set();
 		const subtables = {};
@@ -141,8 +157,6 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 		};
 
 		const tableList = Array.from(tables);
-		this._selectedTable ??= tableList[0];
-
 		ctx.table = this._selectedTable;
 		ctx.tables = tableList;
 
@@ -153,18 +167,12 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 			subtableList?.sort(diceSizeSorter);
 		} else {
 			subtableList?.sort(smallToLarge);
-		}
-
-		if (!subtableList) {
-			this._selectedSubtable = undefined;
-		} else if (!subtableList.includes(this._selectedSubtable)) {
-			this._selectedSubtable = subtableList?.[0];
 		};
+
 		ctx.subtable = this._selectedSubtable;
 		ctx.subtables = subtableList;
 	};
 
-	_selectedUsers = [game.user.id];
 	async #prepareDataFiltersContext(ctx) {
 		ctx.users = [];
 		ctx.selectedUsers = this._selectedUsers;
@@ -177,25 +185,35 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 
 		ctx.privacySetting = this._privacySetting;
 		ctx.privacyOptions = [
-			{ label: `Only Public Data`, value: `none` },
-			{ label: `Only Your Private Data`, value: `my` },
+			{ label: `Self`, value: PrivacyMode.SELF },
+			{ label: `Private`, value: PrivacyMode.PRIVATE },
+			{ label: `Public`, value: PrivacyMode.PUBLIC },
 		];
 		if (game.user.isGM) {
 			ctx.privacyOptions.push(
-				{ label: `All Private Data`, value: `all` },
+				{ label: `Blind`, value: PrivacyMode.GM },
 			);
 		};
 	};
 
-	_graphData = {};
-	_privacySetting = `my`;
-	async #prepareGraphContext(_ctx) {
+	async #prepareGraphContext(ctx) {
 		const table = await CONFIG.stats.db.getTable(this.activeTableID);
+		if (!table) {
+			this._graphData = null;
+			ctx.showGraph = false;
+			ctx.classes = `alert-box warning`;
+			return;
+		};
+		ctx.classes = ``;
+		ctx.showGraph = true;
+
 		const userData = await CONFIG.stats.db.getRows(
 			this.activeTableID,
 			this._selectedUsers,
 			this._privacySetting,
 		);
+
+		Logger.log(userData);
 
 		const data = {};
 		const allBuckets = new Set();
@@ -265,7 +283,9 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 		};
 		console.log(`graphData`, this._graphData);
 	};
+	// #endregion Data Prep
 
+	// #region Actions
 	/**
 	 * @param {Event} event
 	 */
@@ -283,4 +303,5 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 
 	/** @this {StatsViewer} */
 	static async #addAllUsers() {};
+	// #endregion Actions
 };

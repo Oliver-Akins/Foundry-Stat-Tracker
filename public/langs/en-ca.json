@@ -3,7 +3,8 @@
 		"common": {
 			"Table": "Table",
 			"Subtable": "Subtable",
-			"Users": "Users"
+			"Users": "Users",
+			"DataVisibility": "Data Visibility"
 		}
 	}
 }

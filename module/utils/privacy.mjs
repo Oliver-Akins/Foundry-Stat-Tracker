@@ -1,7 +1,11 @@
 export const PrivacyMode = Object.freeze({
+	/** Only the GM is able to the see the result of the row */
 	GM: `gm`,
+	/** Both the GM and the logged in user are able to see the row */
 	PRIVATE: `private`,
+	/** Only the logged in user is able to see the row */
 	SELF: `self`,
+	/** Everyone is able to see the row */
 	PUBLIC: `public`,
 });
 
@@ -23,22 +27,37 @@ export function determinePrivacyFromRollMode(rollMode) {
  *
  * @param {Array<any>} rows The rows to filter
  * @param {string} userID The user's ID who the rows belong to
- * @param {"all"|"me"|"none"} privacy The privacy level we're filtering for
+ * @param {(PrivacyMode[keyof PrivacyMode])[]} privacies The privacy level we're filtering for
  * @returns The filtered rows
  */
-export function filterPrivateRows(rows, userID, privacy) {
-	console.log(rows, userID, privacy);
+export function filterPrivateRows(rows, userID, privacies) {
+	console.log({rows, userID, privacies});
 	const filtered = [];
 
 	const isMe = userID === game.user.id;
-	// TODO: make this use a permission rather than just isGM
-	const canSeeAll = game.user.isGM;
+	const isGM = game.user.isGM;
 
 	for (const row of rows) {
+		let allowed = privacies.includes(row.privacy);
 
-		let allowed = !row.isPrivate;
-		allowed ||= privacy === `all` && canSeeAll;
-		allowed ||= privacy === `my` && isMe;
+		/*
+		Assert that the user is actually allowed to see the privacy level, even if
+		they provide through the param that they want that privacy level.
+		*/
+		switch (row.privacy) {
+			case PrivacyMode.SELF: {
+				allowed &&= isMe;
+				break;
+			};
+			case PrivacyMode.GM: {
+				allowed &&= isGM;
+				break;
+			};
+			case PrivacyMode.PRIVATE: {
+				allowed &&= (isMe || isGM);
+				break;
+			};
+		};
 
 		if (allowed) {
 			filtered.push(row);

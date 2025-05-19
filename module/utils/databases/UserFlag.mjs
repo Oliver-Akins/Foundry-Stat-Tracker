@@ -1,6 +1,4 @@
 /* eslint-disable no-unused-vars */
-import { Table } from "./model.mjs";
-
 const tablesFlag = `tables`;
 
 export class UserFlagDatabase {
@@ -22,8 +20,6 @@ export class UserFlagDatabase {
 				datasets[user.id] = null;
 				continue;
 			};
-
-			const table = new Table(tables[tableId]);
 		}
 		return datasets;
 	};

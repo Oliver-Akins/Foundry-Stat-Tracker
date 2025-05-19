@@ -9,13 +9,13 @@ Hooks.on(`preCreateChatMessage`, (_message, context, options, author) => {
 	/** An object of dice denomination to rows to add */
 	const rows = {};
 
-	const mode = determinePrivacyFromRollMode(options.rollMode);
+	const privacy = determinePrivacyFromRollMode(options.rollMode);
 	for (const roll of context.rolls) {
 		for (const die of roll.dice) {
 			const size = die.denomination;
 			rows[size] ??= [];
 			for (const result of die.results) {
-				rows[size].push({ mode, value: result.result });
+				rows[size].push({ privacy, value: result.result });
 			};
 		};
 	};

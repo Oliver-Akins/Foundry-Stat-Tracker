@@ -1,4 +1,7 @@
 stats-tracker-multi-select {
+	/*
+	TODO: Improve styling when this isn't the tallest element in a row
+	*/
 	display: grid;
 	grid-template-columns: auto minmax(0, 1fr);
 	gap: 2px;

@@ -5,8 +5,8 @@ import { TableManager } from "./Apps/TableManager.mjs";
 import { TestApp } from "./Apps/TestApp.mjs";
 
 // Utils
+import { filterPrivateRows, PrivacyMode } from "./utils/privacy.mjs";
 import { validateBucketConfig, validateValue } from "./utils/buckets.mjs";
-import { filterPrivateRows } from "./utils/privacy.mjs";
 
 const { deepFreeze } = foundry.utils;
 
@@ -25,6 +25,9 @@ Object.defineProperty(
 				filterPrivateRows,
 				validateValue,
 				validateBucketConfig,
+			},
+			enums: {
+				PrivacyMode,
 			},
 		}),
 		writable: false,

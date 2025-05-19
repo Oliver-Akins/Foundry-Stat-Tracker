@@ -1,3 +1,11 @@
-<div>
-	<canvas></canvas>
+<div class="{{classes}} center">
+	{{#if showGraph}}
+		<canvas></canvas>
+	{{else}}
+		{{#if table}}
+			<span class="large">Select a Subtable</span>
+		{{else}}
+			<span class="large">Select a Table</span>
+		{{/if}}
+	{{/if}}
 </div>
