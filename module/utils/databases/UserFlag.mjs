@@ -1,32 +1,119 @@
-/* eslint-disable no-unused-vars */
-const tablesFlag = `tables`;
+import { filterPrivateRows, PrivacyMode } from "../privacy.mjs";
+import { Database } from "./Database.mjs";
+import { Logger } from "../Logger.mjs";
 
-export class UserFlagDatabase {
-	static getTables() {
-		/** @type {Array<{ name: string; }>} */
-		const tableConfig = game.settings.get(__ID__, `tables`);
-		return tableConfig ?? [];
+const { mergeObject, randomID } = foundry.utils;
+
+const dataFlag = `rows`;
+
+export class UserFlagDatabase extends Database {
+	// MARK: Row Ops
+	static async createRow(tableID, userID, row, { rerender = true } = {}) {
+		const table = await this.getTable(tableID);
+		let user = game.users.get(userID);
+		if (!table || !user) { return };
+
+		row._id ||= randomID();
+		row.timestamp = new Date().toISOString();
+
+		const userData = user.getFlag(__ID__, dataFlag);
+		userData[tableID] ??= [];
+		userData[tableID].push(row);
+		await user.setFlag(__ID__, userData);
+
+		if (rerender) {
+			this.render({ userUpdated: userID });
+		};
+		this.triggerListeners();
 	};
 
-	static createRow(table, user, row) {};
+	static async createRows(tableID, userID, rows, { rerender = true } = {}) {
+		const table = await this.getTable(tableID);
+		let user = game.users.get(userID);
+		if (!table || !user) { return };
 
-	static getRows(tableId, ...users) {
-		if (users.length === 0) { users = [game.user] };
+		const userData = user.getFlag(__ID__, dataFlag);
+		userData[tableID] ??= [];
+
+		for (const row of rows) {
+			row._id ||= randomID();
+			row.timestamp = new Date().toISOString();
+			userData[tableID].push(row);
+		};
+
+		await user.setFlag(__ID__, userData);
+
+		if (rerender) {
+			this.render({ userUpdated: userID });
+		};
+		this.triggerListeners();
+	};
+
+	static async getRows(tableID, userIDs, privacy = [PrivacyMode.PUBLIC]) {
+		const table = await this.getTable(tableID);
+		if (!table) { return };
+		if (!userIDs || userIDs.length === 0) { userIDs = [game.user.id] };
 
 		const datasets = {};
-		for (const user of users) {
-			const tables = user.getFlag(__ID__, tablesFlag) ?? {};
-			if (tables[tableId] === undefined) {
-				datasets[user.id] = null;
+		for (const userID of userIDs) {
+			const user = game.users.get(userID);
+			if (!user) {
+				Logger.warn(`Failed to find user with ID "${userID}", skipping.`);
 				continue;
 			};
-		}
+
+			const userData = user.getFlag(__ID__, dataFlag);
+			datasets[userID] = filterPrivateRows(
+				userData[tableID] ?? [],
+				userID,
+				privacy,
+			);
+		};
+
 		return datasets;
 	};
 
-	static updateRow(table, user, rowId, changes) {};
+	static async updateRow(tableID, userID, rowID, changes) {
+		const table = await this.getTable(tableID);
+		if (!table) {
+			Logger.error(`Cannot find the table with ID "${tableID}"`);
+			return;
+		};
 
-	static deleteRow(table, user, rowId) {};
+		const user = game.users.get(userID);
+		if (!user) {
+			Logger.error(`Can't find the user with ID "${tableID}"`);
+			return;
+		};
+
+		const userData = user.getFlag(__ID__, dataFlag);
+		let row = userData[tableID]?.find(row => row._id === rowID);
+		if (!row) { return };
+		mergeObject(row, changes);
+		await user.setFlag(__ID__, dataFlag, userData);
+		this.render({ userUpdated: userID });
+		this.triggerListeners();
+	};
+
+	static async deleteRow(tableID, userID, rowID) {
+		const table = await this.getTable(tableID);
+		if (!table) {
+			Logger.error(`Cannot find the table with ID "${tableID}"`);
+			return;
+		};
+
+		const user = game.users.get(userID);
+		if (!user) {
+			Logger.error(`Can't find the user with ID "${tableID}"`);
+			return;
+		};
+
+		const userData = user.getFlag(__ID__, dataFlag);
+		let rowIndex = userData[tableID].findIndex(row => row._id === rowID);
+		if (rowIndex === -1) { return };
+		userData[tableID].splice(rowIndex, 1);
+		await user.setFlag(__ID__, dataFlag, userData);
+		this.render({ userUpdated: userID });
+		this.triggerListeners();
+	};
 };
-
-/* eslint-enable no-unused-vars */
