@@ -41,7 +41,7 @@ export class StatSidebar extends HandlebarsApplicationMixin(AbstractSidebarTab) 
 			openStats: { label: `View Stats`, action: `openStats` },
 			createTable: { label: `Create New Table`, action: `createTable` },
 			manageTables: { label: `Manage Tables`, action: `manageTables` },
-			manageData: { label: `Manage Data`, action: `` },
+			// manageData: { label: `Manage Data`, action: `` },
 		};
 
 		if (!game.user.isGM) {
@@ -49,10 +49,11 @@ export class StatSidebar extends HandlebarsApplicationMixin(AbstractSidebarTab) 
 			delete controls.manageTables;
 		};
 
-		const canManageTheirOwnData = false;
-		if (!game.user.isGM && !canManageTheirOwnData) {
-			delete controls.manageData;
-		};
+		// TODO: Add this back once row management is implemented
+		// const canManageTheirOwnData = false;
+		// if (!game.user.isGM && !canManageTheirOwnData) {
+		// 	delete controls.manageData;
+		// };
 
 		Hooks.callAll(`${__ID__}.getStatsSidebarControls`, controls);
 		ctx.controls = Object.values(controls);
