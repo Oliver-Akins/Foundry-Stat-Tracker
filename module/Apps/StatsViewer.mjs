@@ -260,10 +260,10 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 				animation: false,
 				scales: {
 					y: {
-						stacked: table.config?.stacked ?? false,
+						stacked: table.graph?.stacked ?? false,
 					},
 					x: {
-						stacked: table.config?.stacked ?? false,
+						stacked: table.graph?.stacked ?? false,
 					},
 				},
 			},
