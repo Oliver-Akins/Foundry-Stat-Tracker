@@ -1,6 +1,6 @@
+import { filterPrivateRows, PrivacyMode } from "../privacy.mjs";
 import { createDiceTable } from "./utils.mjs";
 import { Database } from "./Database.mjs";
-import { filterPrivateRows } from "../privacy.mjs";
 import { Logger } from "../Logger.mjs";
 import { validateBucketConfig } from "../buckets.mjs";
 
@@ -148,7 +148,7 @@ export class MemoryDatabase extends Database {
 		};
 	};
 
-	static async getRows(tableID, userIDs, privacy = `none`) {
+	static async getRows(tableID, userIDs, privacy = [PrivacyMode.PUBLIC]) {
 		if (userIDs.length === 0) {
 			return {};
 		};
@@ -183,12 +183,4 @@ export class MemoryDatabase extends Database {
 		this.#rows[userID][table].splice(rowIndex, 1);
 		this.render({ userUpdated: userID });
 	};
-
-	/**
-	 * Used to listen for changes from other clients and refresh the local DB as
-	 * required, so that the StatsTracker stays up to date.
-	 */
-	static async registerListeners() {};
-
-	static async unregisterListeners() {};
 };
