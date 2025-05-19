@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { PrivacyMode } from "../privacy.mjs";
 import { validateBucketConfig } from "../buckets.mjs";
 
 /*
@@ -39,14 +40,14 @@ export class Database {
 		if (name.split(`/`).length > 2) {
 			ui.notifications.error(`Subtables are not able to have subtables`);
 			return false;
-		}
+		};
 
 		const tables = game.settings.get(__ID__, `tables`);
 		const [ table, subtable ] = name.split(`/`);
 		if (subtable && tables[table]) {
 			ui.notifications.error(`Cannot add subtable for a table that already exists`);
 			return false;
-		}
+		};
 
 		if (tables[name]) {
 			ui.notifications.error(`Cannot create table that already exists`);
@@ -127,23 +128,23 @@ export class Database {
 	};
 
 	// MARK: Row Ops
-	static async createRow(table, userID, row, opts) {
+	static async createRow(tableID, userID, row, opts) {
 		throw new Error(`createRow() must be implemented`);
 	};
 
-	static async createRows(table, userID, rows, opts) {
+	static async createRows(tableID, userID, rows, opts) {
 		throw new Error(`createRows() must be implemented`);
 	};
 
-	static async getRows(tableID, userIDs, privacy = `none`) {
+	static async getRows(tableID, userIDs, privacy = [PrivacyMode.PUBLIC]) {
 		throw new Error(`getRows() must be implemented`);
 	};
 
-	static async updateRow(table, userID, rowID, changes) {
+	static async updateRow(tableID, userID, rowID, changes) {
 		throw new Error(`updateRow() must be implemented`);
 	};
 
-	static async deleteRow(table, userID, rowID) {
+	static async deleteRow(tableID, userID, rowID) {
 		throw new Error(`deleteRow() must be implemented`);
 	};
 
@@ -190,6 +191,8 @@ export class Database {
 	 * as required in order to keep the data as up-to-date as possible.
 	 */
 	static async registerListeners() {};
+
+	static async triggerListeners() {};
 
 	static async unregisterListeners() {};
 };
