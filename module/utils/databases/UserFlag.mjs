@@ -19,7 +19,7 @@ export class UserFlagDatabase extends Database {
 		const userData = user.getFlag(__ID__, dataFlag);
 		userData[tableID] ??= [];
 		userData[tableID].push(row);
-		await user.setFlag(__ID__, userData);
+		await user.setFlag(__ID__, dataFlag, userData);
 
 		if (rerender) {
 			this.render({ userUpdated: userID });
@@ -32,7 +32,7 @@ export class UserFlagDatabase extends Database {
 		let user = game.users.get(userID);
 		if (!table || !user) { return };
 
-		const userData = user.getFlag(__ID__, dataFlag);
+		const userData = user.getFlag(__ID__, dataFlag) ?? {};
 		userData[tableID] ??= [];
 
 		for (const row of rows) {
@@ -41,7 +41,7 @@ export class UserFlagDatabase extends Database {
 			userData[tableID].push(row);
 		};
 
-		await user.setFlag(__ID__, userData);
+		await user.setFlag(__ID__, dataFlag, userData);
 
 		if (rerender) {
 			this.render({ userUpdated: userID });
@@ -62,7 +62,7 @@ export class UserFlagDatabase extends Database {
 				continue;
 			};
 
-			const userData = user.getFlag(__ID__, dataFlag);
+			const userData = user.getFlag(__ID__, dataFlag) ?? {};
 			datasets[userID] = filterPrivateRows(
 				userData[tableID] ?? [],
 				userID,
@@ -86,7 +86,7 @@ export class UserFlagDatabase extends Database {
 			return;
 		};
 
-		const userData = user.getFlag(__ID__, dataFlag);
+		const userData = user.getFlag(__ID__, dataFlag) ?? {};
 		let row = userData[tableID]?.find(row => row._id === rowID);
 		if (!row) { return };
 		mergeObject(row, changes);
@@ -108,8 +108,8 @@ export class UserFlagDatabase extends Database {
 			return;
 		};
 
-		const userData = user.getFlag(__ID__, dataFlag);
-		let rowIndex = userData[tableID].findIndex(row => row._id === rowID);
+		const userData = user.getFlag(__ID__, dataFlag) ?? {};
+		let rowIndex = userData[tableID]?.findIndex(row => row._id === rowID);
 		if (rowIndex === -1) { return };
 		userData[tableID].splice(rowIndex, 1);
 		await user.setFlag(__ID__, dataFlag, userData);
