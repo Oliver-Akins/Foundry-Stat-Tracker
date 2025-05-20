@@ -43,7 +43,7 @@ Hooks.on(`init`, () => {
 
 	if (import.meta.env.DEV) {
 		CONFIG.stats.db = MemoryDatabase;
-	}
+	};
 
 	Handlebars.registerHelper(helpers);
 	registerCustomComponents();
