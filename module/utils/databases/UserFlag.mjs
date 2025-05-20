@@ -2,7 +2,7 @@ import { filterPrivateRows, PrivacyMode } from "../privacy.mjs";
 import { Database } from "./Database.mjs";
 import { Logger } from "../Logger.mjs";
 
-const { mergeObject, randomID } = foundry.utils;
+const { hasProperty, mergeObject, randomID } = foundry.utils;
 
 const dataFlag = `rows`;
 
@@ -115,5 +115,28 @@ export class UserFlagDatabase extends Database {
 		await user.setFlag(__ID__, dataFlag, userData);
 		this.render({ userUpdated: userID });
 		this.triggerListeners();
+	};
+
+	// MARK: Listeners
+	static #listener = null;
+	static async registerListeners() {
+		if (this.#listener !== null) { return };
+
+		this.#listener = Hooks.on(`updateUser`, (doc, diff, options, userID) => {
+			Logger.debug({ diff, userID, doc });
+			// Shortcircuit when on the client that triggered the update
+			if (userID === game.user.id) { return };
+			if (!hasProperty(diff, `flags.${__ID__}.${dataFlag}`)) { return };
+			this.render({ userUpdated: doc.id });
+		});
+	};
+
+	static async triggerListeners() {
+		// No-op because the User document lifecycle takes care of it
+	};
+
+	static async unregisterListeners() {
+		Hooks.off(`updateUser`, this.#listener);
+		this.#listener = null;
 	};
 };
