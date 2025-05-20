@@ -4,6 +4,11 @@ import { TableCreator } from "./Apps/TableCreator.mjs";
 import { TableManager } from "./Apps/TableManager.mjs";
 import { TestApp } from "./Apps/TestApp.mjs";
 
+// Databases
+import { Database } from "./utils/databases/Database.mjs";
+import { MemoryDatabase } from "./utils/databases/Memory.mjs";
+import { UserFlagDatabase } from "./utils/databases/UserFlag.mjs";
+
 // Utils
 import { filterPrivateRows, PrivacyMode } from "./utils/privacy.mjs";
 import { validateBucketConfig, validateValue } from "./utils/buckets.mjs";
@@ -28,6 +33,11 @@ Object.defineProperty(
 			},
 			enums: {
 				PrivacyMode,
+			},
+			databases: {
+				Database,
+				MemoryDatabase,
+				UserFlagDatabase,
 			},
 		}),
 		writable: false,
