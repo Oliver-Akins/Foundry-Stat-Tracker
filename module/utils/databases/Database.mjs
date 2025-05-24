@@ -181,7 +181,7 @@ export class Database {
 	 */
 	static async render(opts) {
 		for (const app of this._apps.values()) {
-			app.render(opts);
+			app.render(foundry.utils.deepClone(opts));
 		};
 	};
 
