@@ -84,11 +84,11 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 	// #endregion Instance Data
 
 	// #region Lifecycle
-	async render({ userUpdated, ...opts } = {}) {
+	async render({ userUpdated, ...opts } = {}, _options) {
 		if (userUpdated && !this._selectedUsers.includes(userUpdated)) {
 			return;
 		}
-		await super.render(opts);
+		await super.render(opts, _options);
 	};
 
 	async _onFirstRender(context, options) {
