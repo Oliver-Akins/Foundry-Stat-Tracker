@@ -1,9 +1,13 @@
 import { filePath } from "../consts.mjs";
+import { Logger } from "../utils/Logger.mjs";
+import { PrivacyMode } from "../utils/privacy.mjs";
 
-const { HandlebarsApplicationMixin } = foundry.applications.api;
+const { HandlebarsApplicationMixin, ApplicationV2 } = foundry.applications.api;
 const { AbstractSidebarTab } = foundry.applications.sidebar;
+const { getType } = foundry.utils;
 
 export class StatSidebar extends HandlebarsApplicationMixin(AbstractSidebarTab) {
+	// #region Options
 	/** @override */
 	static DEFAULT_OPTIONS = {
 		classes: [
@@ -14,9 +18,7 @@ export class StatSidebar extends HandlebarsApplicationMixin(AbstractSidebarTab) 
 			title: `SIDEBAR.TabSettings`,
 		},
 		actions: {
-			openStats: this.#openStats,
-			manageTables: this.#manageTables,
-			createTable: this.#createTable,
+			openApp: this.#openApp,
 		},
 	};
 
@@ -25,23 +27,74 @@ export class StatSidebar extends HandlebarsApplicationMixin(AbstractSidebarTab) 
 
 	/** @override */
 	static PARTS = {
-		stats: {
-			template: filePath(`templates/Apps/StatSidebar/main.hbs`),
-			root: true,
+		// stats: {
+		// 	template: filePath(`templates/Apps/StatSidebar/main.hbs`),
+		// 	root: true,
+		// },
+		summaryText: {
+			template: filePath(`templates/Apps/StatSidebar/.hbs`),
+		},
+		summaryGraph: {
+			template: filePath(`templates/Apps/StatSidebar/.hbs`),
+		},
+		appControls: {
+			template: filePath(`templates/Apps/StatSidebar/controlSection.hbs`),
 		},
 	};
+	// #endregion Options
 
-	async _prepareContext(options) {
+	// #region Lifecycle
+	async render(options, _options) {
+		const { userUpdated = null } = (getType(options) === `Object` ? options : _options) ?? {};
+		if (userUpdated && userUpdated !== game.user.id) {
+			// TODO: Update the data in the graph
+			return;
+		};
+		return super.render(options, _options);
+	};
+
+	async _onFirstRender(context, options) {
+		await super._onFirstRender(context, options);
+		CONFIG.stats.db.addApp(this);
+	};
+	// #endregion Lifecycle
+
+	// #region Data Prep
+	async _preparePartContext(context, options) {
 		const ctx = await super._prepareContext(options);
+
+		this.#prepareApps(ctx);
+
+		return ctx;
+	};
+
+	async #prepareSummary(ctx) {
 		const db = CONFIG.stats.db;
 
-		ctx.tableCount = (await db.getTables()).length;
+		const tables = await db.getTables();
+		ctx.tableCount = tables.length;
+		ctx.rowCount = {
+			total: 0,
+			public: 0,
+			self: 0,
+			private: 0,
+			gm: 0,
+		};
+		for (const table of tables) {
+			const rows = await db.getRows(table.name, [game.user.id], Object.values(PrivacyMode));
+			for (const row of rows[game.user.id] ?? []) {
+				ctx.rowCount[row.privacy]++;
+				ctx.rowCount.total++;
+			};
+		};
+	};
 
+	async #prepareApps(ctx) {
 		const controls = {
-			openStats: { label: `View Stats`, action: `openStats` },
-			createTable: { label: `Create New Table`, action: `createTable` },
-			manageTables: { label: `Manage Tables`, action: `manageTables` },
-			// manageData: { label: `Manage Data`, action: `` },
+			openStats: { label: `View Stats`, action: `openApp`, appKey: `viewer` },
+			createTable: { label: `Create New Table`, action: `openApp`, appKey: `creator` },
+			manageTables: { label: `Manage Tables`, action: `openApp`, appKey: `tableManager` },
+			// manageData: { label: `Manage Data`, action: `openApp`, appKey: `rowManager` },
 		};
 
 		if (!game.user.isGM) {
@@ -55,27 +108,21 @@ export class StatSidebar extends HandlebarsApplicationMixin(AbstractSidebarTab) 
 		// 	delete controls.manageData;
 		// };
 
-		Hooks.callAll(`${__ID__}.getStatsSidebarControls`, controls);
+		Hooks.callAll(`${__ID__}.getStatsSidebarApps`, controls);
 		ctx.controls = Object.values(controls);
-
-		return ctx;
 	};
+	// #endregion Data Prep
 
-	/** @this {StatSidebar} */
-	static async #openStats() {
-		const app = new CONFIG.stats.viewer;
+	// #region Actions
+	static async #openApp(target) {
+		const { appKey } = target.dataset;
+		const cls = CONFIG.stats[appKey];
+		if (!(cls.prototype instanceof ApplicationV2)) {
+			Logger.error(`Cannot create an app from`, cls);
+			return;
+		};
+		const app = new cls();
 		app.render({ force: true });
 	};
-
-	/** @this {StatSidebar} */
-	static async #manageTables() {
-		const app = new CONFIG.stats.manager;
-		app.render({ force: true });
-	};
-
-	/** @this {StatSidebar} */
-	static async #createTable() {
-		const app = new CONFIG.stats.creator;
-		app.render({ force: true });
-	};
+	// #endregion Actions
 };

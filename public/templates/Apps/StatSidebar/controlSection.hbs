@@ -1,0 +1,12 @@
+<section>
+	<h4 class="divider">{{ sectionTitle }}</h4>
+	{{#each controls as | btn |}}
+		<button
+			type="button"
+			data-action="{{ btn.action }}"
+			data-app-key="{{ btn.appKey }}"
+		>
+			{{ btn.label }}
+		</button>
+	{{/each}}
+</section>

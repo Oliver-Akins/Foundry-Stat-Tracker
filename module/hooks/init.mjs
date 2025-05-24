@@ -38,7 +38,8 @@ Hooks.on(`init`, () => {
 		db: UserFlagDatabase,
 		viewer: StatsViewer,
 		creator: TableCreator,
-		manager: TableManager,
+		tableManager: TableManager,
+		rowManager: null,
 	};
 
 	if (import.meta.env.DEV) {

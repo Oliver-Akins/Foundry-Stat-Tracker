@@ -4,28 +4,30 @@
 		<span>Count of Tables</span>
 		<span>{{ tableCount }}</span>
 	</div>
-	{{!-- <div class="info">
+	<div class="info">
 		<span>Your Total Rows</span>
-		<span>{{ userRowCount }}</span>
+		<span>{{ rowCount.total }}</span>
+	</div>
+	<div class="info">
+		<span>Your Public Rows</span>
+		<span>{{ rowCount.public }}</span>
+	</div>
+	<div class="info">
+		<span>Your Self Rows</span>
+		<span>{{ rowCount.self }}</span>
 	</div>
 	<div class="info">
 		<span>Your Private Rows</span>
-		<span>{{ userPrivateRowCount }}</span>
+		<span>{{ rowCount.private }}</span>
 	</div>
 	<div class="info">
+		<span>Your Blind Rows</span>
+		<span>{{ rowCount.gm }}</span>
+	</div>
+	{{!-- <div class="info">
 		<span>Global Row Count</span>
 		<span>{{ globalRowCount }}</span>
 	</div> --}}
 </section>
 
-<section>
-	<h4 class="divider">Controls</h4>
-	{{#each controls as | btn |}}
-		<button
-			type="button"
-			data-action="{{ btn.action }}"
-		>
-			{{ btn.label }}
-		</button>
-	{{/each}}
-</section>
+
