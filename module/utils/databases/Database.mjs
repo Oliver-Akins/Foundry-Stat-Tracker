@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
+import { BucketTypes, validateBucketConfig } from "../buckets.mjs";
+import { Logger } from "../Logger.mjs";
 import { PrivacyMode } from "../privacy.mjs";
-import { validateBucketConfig } from "../buckets.mjs";
+import { tableSchema } from "./model.mjs";
 
 /*
 NOTE:
@@ -28,6 +30,12 @@ Default Subtables:
 
 const { deleteProperty, diffObject, expandObject, mergeObject } = foundry.utils;
 
+/**
+ * The generic Database implementation, any subclasses should implement all of
+ * the required methods, optionally overriding the methods provided by this class,
+ * data validation should be used on any and all of the create* methods to ensure
+ * consistency across databases.
+ */
 export class Database {
 	// MARK: Table Ops
 	static async createTable(tableConfig) {
@@ -36,17 +44,34 @@ export class Database {
 			return false;
 		};
 
-		const name = tableConfig.name;
-		if (name.split(`/`).length > 2) {
-			ui.notifications.error(`Subtables are not able to have subtables`);
+		const { error, value: corrected } = tableSchema.validate(
+			tableConfig,
+			{ abortEarly: false, convert: true, dateFormat: `iso`, render: false },
+		);
+		if (error) {
+			ui.notifications.error(`Table being created did not conform to required schema, see console for more information.`, { console: false });
+			Logger.error(error);
 			return false;
 		};
 
-		const tables = game.settings.get(__ID__, `tables`);
+		const name = tableConfig.name;
 		const [ table, subtable ] = name.split(`/`);
+
+		const tables = game.settings.get(__ID__, `tables`);
 		if (subtable && tables[table]) {
 			ui.notifications.error(`Cannot add subtable for a table that already exists`);
 			return false;
+		};
+
+		if (table === `Dice`) {
+			if (!subtable.match(/^d[0-9]+$/)) {
+				ui.notifications.error(`Cannot create a Dice subtable that doesn't use "dX" as it's subtable name.`);
+				return false;
+			};
+			if (tableConfig.buckets.type === BucketTypes.RANGE) {
+				ui.notifications.error(`Cannot create a Dice subtable with a non-range bucket type`);
+				return false;
+			};
 		};
 
 		if (tables[name]) {
@@ -54,7 +79,7 @@ export class Database {
 			return false;
 		};
 
-		tables[name] = tableConfig;
+		tables[name] = corrected;
 		game.settings.set(__ID__, `tables`, tables);
 		this.render({ tags: [`table`] });
 		return true;
@@ -99,7 +124,7 @@ export class Database {
 		try {
 			updated.buckets = validateBucketConfig(updated.buckets);
 		} catch (e) {
-			ui.notifications.error(e);
+			Logger.error(e);
 			return false;
 		};
 

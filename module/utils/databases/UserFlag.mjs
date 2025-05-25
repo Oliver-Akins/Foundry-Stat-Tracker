@@ -1,6 +1,7 @@
 import { filterPrivateRows, PrivacyMode } from "../privacy.mjs";
 import { Database } from "./Database.mjs";
 import { Logger } from "../Logger.mjs";
+import { rowSchema } from "./model.mjs";
 
 const { hasProperty, mergeObject, randomID } = foundry.utils;
 
@@ -13,12 +14,22 @@ export class UserFlagDatabase extends Database {
 		let user = game.users.get(userID);
 		if (!table || !user) { return };
 
-		row._id ||= randomID();
+		row._id = randomID();
 		row.timestamp = new Date().toISOString();
+
+		const { error, value: corrected } = rowSchema.validate(
+			row,
+			{ abortEarly: false, convert: true, dateFormat: `iso`, render: false },
+		);
+		if (error) {
+			ui.notifications.error(`Row being created did not conform to required schema, see console for more information.`, { console: false });
+			Logger.error(error);
+			return false;
+		};
 
 		const userData = user.getFlag(__ID__, dataFlag);
 		userData[tableID] ??= [];
-		userData[tableID].push(row);
+		userData[tableID].push(corrected);
 		await user.setFlag(__ID__, dataFlag, userData);
 
 		if (rerender) {
@@ -36,9 +47,21 @@ export class UserFlagDatabase extends Database {
 		userData[tableID] ??= [];
 
 		for (const row of rows) {
-			row._id ||= randomID();
+			row._id = randomID();
 			row.timestamp = new Date().toISOString();
-			userData[tableID].push(row);
+
+			const { error, value: corrected } = rowSchema.validate(
+				row,
+				{ abortEarly: false, convert: true, dateFormat: `iso`, render: false },
+			);
+			if (error) {
+				ui.notifications.error(`A row being created did not conform to required schema, see console for more information.`, { console: false });
+				Logger.error(`Failing row:`, row);
+				Logger.error(error);
+				continue;
+			};
+
+			userData[tableID].push(corrected);
 		};
 
 		await user.setFlag(__ID__, dataFlag, userData);

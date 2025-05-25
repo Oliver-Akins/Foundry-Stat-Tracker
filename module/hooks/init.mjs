@@ -9,6 +9,7 @@ import { TableCreator } from "../Apps/TableCreator.mjs";
 import { TableManager } from "../Apps/TableManager.mjs";
 
 // Misc Imports
+import { api } from "../api.mjs";
 import helpers from "../handlebarsHelpers/_index.mjs";
 import { Logger } from "../utils/Logger.mjs";
 import { registerCustomComponents } from "../Apps/elements/_index.mjs";
@@ -43,6 +44,18 @@ Hooks.on(`init`, () => {
 
 	if (import.meta.env.DEV) {
 		CONFIG.stats.db = MemoryDatabase;
+	};
+
+	game.modules.get(__ID__).api = api;
+	if (game.settings.get(__ID__, `globalAPI`)) {
+		Object.defineProperty(
+			globalThis,
+			`stats`,
+			{
+				value: api,
+				writable: false,
+			},
+		);
 	};
 
 	Handlebars.registerHelper(helpers);

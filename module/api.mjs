@@ -10,36 +10,42 @@ import { MemoryDatabase } from "./utils/databases/Memory.mjs";
 import { UserFlagDatabase } from "./utils/databases/UserFlag.mjs";
 
 // Utils
+import { barGraphSchema, numberBucketSchema, rowSchema, stringBucketSchema, tableSchema } from "./utils/databases/model.mjs";
 import { filterPrivateRows, PrivacyMode } from "./utils/privacy.mjs";
 import { validateBucketConfig, validateValue } from "./utils/buckets.mjs";
 
 const { deepFreeze } = foundry.utils;
 
-Object.defineProperty(
-	globalThis,
-	`stats`,
-	{
-		value: deepFreeze({
-			Apps: {
-				TestApp,
-				StatsViewer,
-				TableCreator,
-				TableManager,
-			},
-			utils: {
-				filterPrivateRows,
-				validateValue,
-				validateBucketConfig,
-			},
-			enums: {
-				PrivacyMode,
-			},
-			databases: {
-				Database,
-				MemoryDatabase,
-				UserFlagDatabase,
-			},
-		}),
-		writable: false,
+export const api = deepFreeze({
+	Apps: {
+		TestApp,
+		StatsViewer,
+		TableCreator,
+		TableManager,
 	},
-);
+	utils: {
+		filterPrivateRows,
+		validateValue,
+		validateBucketConfig,
+	},
+	enums: {
+		PrivacyMode,
+	},
+	databases: {
+		Database,
+		MemoryDatabase,
+		UserFlagDatabase,
+	},
+	schemas: {
+		buckets: {
+			range: numberBucketSchema,
+			number: numberBucketSchema,
+			string: stringBucketSchema,
+		},
+		graphs: {
+			bar: barGraphSchema,
+		},
+		table: tableSchema,
+		row: rowSchema,
+	},
+});
