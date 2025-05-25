@@ -32,7 +32,12 @@ export const numberBucketSchema = Joi.object({
 
 export const stringBucketSchema = Joi.object({
 	type: Joi.string().valid(`string`).required(),
-	choices: Joi.array().items(Joi.string().trim().invalid(``)).optional(),
+	choices: Joi
+		.array()
+		.items(
+			Joi.string().trim().invalid(``),
+		)
+		.optional(),
 });
 
 // MARK: Graphs
