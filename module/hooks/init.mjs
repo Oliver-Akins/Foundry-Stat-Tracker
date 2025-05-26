@@ -14,26 +14,31 @@ import helpers from "../handlebarsHelpers/_index.mjs";
 import { Logger } from "../utils/Logger.mjs";
 import { registerCustomComponents } from "../Apps/elements/_index.mjs";
 import { registerMetaSettings } from "../settings/meta.mjs";
+import { registerUserSettings } from "../settings/user.mjs";
 import { registerWorldSettings } from "../settings/world.mjs";
 
 Hooks.on(`init`, () => {
 	Logger.debug(`Initializing`);
 
-	// Add a custom sidebar tab for the module
-	CONFIG.ui.sidebar.TABS.stats = {
-		active: false,
-		icon: `fa-solid fa-chart-line`,
-		tooltip: `Stats!`,
-	};
-	CONFIG.ui.stats = StatSidebar;
-
-	// Inject the tab right before settings;
-	const temp = CONFIG.ui.sidebar.TABS.settings;
-	delete CONFIG.ui.sidebar.TABS.settings;
-	CONFIG.ui.sidebar.TABS.settings = temp;
-
 	registerMetaSettings();
 	registerWorldSettings();
+	registerUserSettings();
+
+	// Add a custom sidebar tab for the module
+	if (game.settings.get(__ID__, `statsSidebarTab`)) {
+		CONFIG.ui.sidebar.TABS.stats = {
+			active: false,
+			icon: `fa-solid fa-chart-line`,
+			tooltip: `Stats!`,
+		};
+		CONFIG.ui.stats = StatSidebar;
+
+		// Inject the custom tab right before settings
+		const temp = CONFIG.ui.sidebar.TABS.settings;
+		delete CONFIG.ui.sidebar.TABS.settings;
+		CONFIG.ui.sidebar.TABS.settings = temp;
+	};
+
 
 	CONFIG.stats = {
 		db: UserFlagDatabase,
