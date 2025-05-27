@@ -12,6 +12,7 @@
     "build": "NODE_ENV=production vite build --mode prod"
   },
   "devDependencies": {
+    "@foundryvtt/foundryvtt-cli": "^1.1.0",
     "@stylistic/eslint-plugin": "^4.2.0",
     "eslint": "^9.25.0",
     "glob": "^11.0.1",

@@ -1,3 +1,10 @@
+# Ignore all of the binaries and stuff that gets built for Foundry from the raw
+# JSON data because it's annoying seeing it in my git changes when it isn't actually
+# needed.
+/packs/**/*
+!/packs/**/*/
+!/packs/**/*.json
+
 # Logs
 logs
 *.log

@@ -22,5 +22,14 @@
 			"name": "English (Canadian)",
 			"path": "langs/en-ca.json"
 		}
+	],
+	"packs": [
+		{
+			"name": "docs",
+			"label": "Documentation",
+			"module": "stat-tracker",
+			"type": "JournalEntry",
+			"path": "packs/docs"
+		}
 	]
 }
