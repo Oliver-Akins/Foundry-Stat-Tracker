@@ -1,9 +1,9 @@
 /* eslint-disable no-undef */
 
+import { readFileSync, symlinkSync } from "fs";
 import { defineConfig } from "vite";
 import { glob } from "glob";
 import path from "path";
-import { readFileSync } from "fs";
 
 // MARK: custom plugins
 function fileMarkerPlugin() {
@@ -41,6 +41,24 @@ function watcher(...globs) {
 	};
 };
 
+/*
+The intent of this plugin is to handle the symlinking of the compendium packs
+so that they can modified during dev without needing to worry about the rebuild
+destroying the in-progress compendia data.
+*/
+function handlePacks() {
+	return {
+		writeBundle(options) {
+			console.log(options.dir);
+			symlinkSync(
+				path.resolve(__dirname, `packs`),
+				`${options.dir}/packs`,
+				`dir`,
+			);
+		},
+	};
+};
+
 // MARK: config
 export default defineConfig(({ mode }) => {
 	const isProd = mode === `prod`;
@@ -49,6 +67,7 @@ export default defineConfig(({ mode }) => {
 
 	if (!isProd) {
 		plugins.push(
+			handlePacks(),
 			watcher(
 				`./public`,
 			),
