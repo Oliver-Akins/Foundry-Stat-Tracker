@@ -16,7 +16,7 @@
       "image": {},
       "text": {
         "format": 1,
-        "content": "<p>Thank you for install Stat Tracker!</p><p>This module aims to provide a clean way of keeping track of any data points you want within Foundry, whether that be dice rolls, or other things like how many natural 1s to natural 20s you get.</p><p>I was inspired by the <a href=\"https://foundryvtt.com/packages/dicestats\" title=\"dicestats\">dicestats</a> module, however it only allows tracking dice statistics, which is something I found myself needing to work around, so I decided to make this module to fill that gap.</p><p>You've already done the hardest part of set up for this module to work on the basic level, installing it! However if you want a more advanced set up for the module, this Journal is your go-to for information.</p><p>This module makes use of multiple key terms which are important for your understanding, the main terms you need to understand are:</p><ul><li><p>@UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.ugzCCxQskUSYMZR4]{Table}</p></li><li><p>@UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.S7Z6mZ0JablJVQJu]{Row}</p></li><li><p>and, @UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.e9FYKidbfFnnTspO]{Bucket}</p></li></ul><p>You can find information about what each of those terms mean within the FAQ section of the documentation or by clicking the above links.</p>"
+        "content": "<p>Thank you for installing Stat Tracker!</p><p>This module aims to provide a clean way of keeping track of any data points you want within Foundry, whether that be dice rolls, or other things like how many natural 1s to natural 20s you get.</p><p>I was inspired by the <a href=\"https://foundryvtt.com/packages/dicestats\" title=\"dicestats\">dicestats</a> module, however it only allows tracking dice statistics, which is something I found myself needing to work around, so I decided to make this module to fill that gap.</p><p>You've already done the hardest part of set up for this module to work on the basic level, installing it! However if you want a more advanced set up for the module, this Journal is your go-to for information.</p><p>This module makes use of multiple key terms which are important for your understanding, the main terms you need to understand are:</p><ul><li><p>@UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.S7Z6mZ0JablJVQJu]{Row}</p></li><li><p>@UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.ugzCCxQskUSYMZR4]{Table}</p></li><li><p>and, @UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.e9FYKidbfFnnTspO]{Bucket}</p></li></ul><p>You can find information about what each of those terms mean within the \"Key Concepts\" section of the documentation or by clicking the above links.</p>"
       },
       "video": {
         "controls": true,
@@ -36,14 +36,14 @@
         "systemId": "empty-system",
         "systemVersion": "0.0.0",
         "createdTime": 1748328891633,
-        "modifiedTime": 1748329657624,
+        "modifiedTime": 1748406648943,
         "lastModifiedBy": "t2sWGWEYSMFrfBu3"
       },
       "_key": "!journal.pages!pBOyeBDuTeowuDOE.xcR48pakEm49hbc2"
     },
     {
-      "sort": 125000,
-      "name": "What's a \"Table\"",
+      "sort": 300000,
+      "name": "Table",
       "type": "text",
       "category": "ZPAbuPbVOLWh75hL",
       "_id": "ugzCCxQskUSYMZR4",
@@ -55,7 +55,7 @@
       "image": {},
       "text": {
         "format": 1,
-        "content": "<p>Whenever you see the term \"Table\" in relation to this module, it is indicating a group of @UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.S7Z6mZ0JablJVQJu]{rows} that are all presented together in graphs. The table is also where graph and @UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.e9FYKidbfFnnTspO]{bucket} configuration is stored.</p>"
+        "content": "<p>Tables are quite close to being a \"container\" for every piece of data within the module, every @UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.S7Z6mZ0JablJVQJu]{row} within the module must be associated with a particular table. The table is responsible for maintaining all of the @UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.e9FYKidbfFnnTspO]{bucket} and @UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.IXZpEBEJsvOpY3OL]{graph} configurations, controlling what data is allowed to be saved and how to represent that data.</p><p>You can manage almost all tables within the module by using the @UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.Z31C8BPl4ZXDn3R6]{Table Manager}.</p>"
       },
       "video": {
         "controls": true,
@@ -75,14 +75,14 @@
         "systemId": "empty-system",
         "systemVersion": "0.0.0",
         "createdTime": 1748329356680,
-        "modifiedTime": 1748329828806,
+        "modifiedTime": 1748394635911,
         "lastModifiedBy": "t2sWGWEYSMFrfBu3"
       },
       "_key": "!journal.pages!pBOyeBDuTeowuDOE.ugzCCxQskUSYMZR4"
     },
     {
-      "sort": 112500,
-      "name": "What's a \"Row\"",
+      "sort": 200000,
+      "name": "Row",
       "type": "text",
       "category": "ZPAbuPbVOLWh75hL",
       "_id": "S7Z6mZ0JablJVQJu",
@@ -94,7 +94,7 @@
       "image": {},
       "text": {
         "format": 1,
-        "content": ""
+        "content": "<p>Rows make up the vast majority of data that the stat tracker stores. Every dice roll, or custom entry, is saved as a single row.</p><p>Each row consists of the following data:</p><ul><li><p>The value (e.g. the result of a single dice roll)</p></li><li><p>A timestamp of when it was added to the database</p></li><li><p>A privacy mode (one for each of the Foundry-provided roll modes, see @UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.WYaZPgSRDx8L7Zmq#privacy-modes]{Privacy Modes})</p></li><li><p>An identifier</p></li></ul><blockquote><p>This combination of data can end up becoming a lot of data to load when opening Foundry, if you don't think you'll be resetting the data very often, please consider checking out the different @UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.PcdmuLgNM15h0in1]{Database Adapters} and picking one of them that is most suitable for your campaign.</p></blockquote>"
       },
       "video": {
         "controls": true,
@@ -114,14 +114,14 @@
         "systemId": "empty-system",
         "systemVersion": "0.0.0",
         "createdTime": 1748329454864,
-        "modifiedTime": 1748329832738,
+        "modifiedTime": 1748394635911,
         "lastModifiedBy": "t2sWGWEYSMFrfBu3"
       },
       "_key": "!journal.pages!pBOyeBDuTeowuDOE.S7Z6mZ0JablJVQJu"
     },
     {
-      "sort": 137500,
-      "name": "What's a \"Bucket\"",
+      "sort": 400000,
+      "name": "Bucket",
       "type": "text",
       "category": "ZPAbuPbVOLWh75hL",
       "_id": "e9FYKidbfFnnTspO",
@@ -153,13 +153,13 @@
         "systemId": "empty-system",
         "systemVersion": "0.0.0",
         "createdTime": 1748329573212,
-        "modifiedTime": 1748329664880,
+        "modifiedTime": 1748394635911,
         "lastModifiedBy": "t2sWGWEYSMFrfBu3"
       },
       "_key": "!journal.pages!pBOyeBDuTeowuDOE.e9FYKidbfFnnTspO"
     },
     {
-      "sort": 237500,
+      "sort": 500000,
       "name": "The Sidebar Tab",
       "type": "text",
       "category": "mrZHFR2i0MYp7aaY",
@@ -192,53 +192,14 @@
         "systemId": "empty-system",
         "systemVersion": "0.0.0",
         "createdTime": 1748329854358,
-        "modifiedTime": 1748330869938,
+        "modifiedTime": 1748394635911,
         "lastModifiedBy": "t2sWGWEYSMFrfBu3"
       },
       "_key": "!journal.pages!pBOyeBDuTeowuDOE.ZI6rVlgXYnZGZ3MS"
     },
     {
-      "sort": 437500,
-      "name": "Player Settings",
-      "type": "text",
-      "category": "mrZHFR2i0MYp7aaY",
-      "_id": "GgrPHfU09UuJl8W8",
-      "system": {},
-      "title": {
-        "show": true,
-        "level": 1
-      },
-      "image": {},
-      "text": {
-        "format": 1,
-        "content": ""
-      },
-      "video": {
-        "controls": true,
-        "volume": 0.5
-      },
-      "src": null,
-      "ownership": {
-        "default": -1,
-        "t2sWGWEYSMFrfBu3": 3
-      },
-      "flags": {},
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "13.344",
-        "systemId": "empty-system",
-        "systemVersion": "0.0.0",
-        "createdTime": 1748330739278,
-        "modifiedTime": 1748330769327,
-        "lastModifiedBy": "t2sWGWEYSMFrfBu3"
-      },
-      "_key": "!journal.pages!pBOyeBDuTeowuDOE.GgrPHfU09UuJl8W8"
-    },
-    {
-      "sort": 337500,
-      "name": "Gamemaster Settings",
+      "sort": 600000,
+      "name": "Configuration",
       "type": "text",
       "category": "mrZHFR2i0MYp7aaY",
       "_id": "UuAWTQtd3QMKOWvU",
@@ -249,7 +210,8 @@
       },
       "image": {},
       "text": {
-        "format": 1
+        "format": 1,
+        "content": "<p>The module provides a bunch of settings to be able to control how it interacts with Foundry in various ways. Each setting has a description provided in the settings configuration window, but these descriptions will go more in depth than the ones in there.</p><p></p><h2>Roll Auto-Tracking</h2><p>This tells the module to automatically track rolls that are sent to the chat, this includes systems, modules, and other rolls like RollTables. As long as it gets sent to the chat, this will allow that roll to automatically be tracked.</p><p>By default, this only tracks the standard dice sizes (d4, d6, d8, d10, d12, d20, d100), however you can add any dice size you want by creating a new table named <code>Dice/dX</code> where <code>X</code> is the number of sides the dice should have (e.g. for a 3-sided dice you would make the table name be <code>Dice/d3</code>). By adding a table in this way, it's configuration will be locked for editing and the only way to change it will be to delete the table entirely.</p><p>For most systems you will want to leave this setting enabled, because otherwise there is a chance that no dice rolls will be tracked at all unless the system has specifically implemented an integration with the module.</p><p></p><h2>Global API</h2><p>This setting is primarily targeted at users who would like to integrate stats tracking into macros, as it exposes a globally available <code>stats</code> variable with references to all of the exposed methods and utility helpers of the module. This can sometimes cause conflicts with systems or other modules, so make sure that there isn't already another a global variable named stats before enabling this setting.</p><p>Below is an example of how to retrieve the module's API both with and without this setting enabled:</p><pre><code>// with it enabled:\nconst statViewer = new stats.Apps.StatsViewer;\nstatViewer.render({ force: true });\n\n// with it disabled\nconst api = game.modules.get(`stat-tracker`)?.api;\nconst statViewer = new api.Apps.StatsViewer;\nstatViewer?.render({ force: true });</code></pre><p></p><h2>Stats Sidebar Tab</h2><p></p>"
       },
       "video": {
         "controls": true,
@@ -269,13 +231,13 @@
         "systemId": "empty-system",
         "systemVersion": "0.0.0",
         "createdTime": 1748330762378,
-        "modifiedTime": 1748330780668,
+        "modifiedTime": 1748408480001,
         "lastModifiedBy": "t2sWGWEYSMFrfBu3"
       },
       "_key": "!journal.pages!pBOyeBDuTeowuDOE.UuAWTQtd3QMKOWvU"
     },
     {
-      "sort": 537500,
+      "sort": 900000,
       "name": "Utilities",
       "type": "text",
       "category": "KGdeJUfatQ9v0raI",
@@ -308,13 +270,13 @@
         "systemId": "empty-system",
         "systemVersion": "0.0.0",
         "createdTime": 1748330904988,
-        "modifiedTime": 1748331608766,
+        "modifiedTime": 1748394635911,
         "lastModifiedBy": "t2sWGWEYSMFrfBu3"
       },
       "_key": "!journal.pages!pBOyeBDuTeowuDOE.TQzWrVTEz4oQhLPD"
     },
     {
-      "sort": 337500,
+      "sort": 800000,
       "name": "Database Adapters",
       "type": "text",
       "category": "KGdeJUfatQ9v0raI",
@@ -327,7 +289,7 @@
       "image": {},
       "text": {
         "format": 1,
-        "content": "<p>This is a list of all available database adapters and how they're configured.</p><p></p><h2>Database</h2><p>This database adapter isn't a full adapter, this is an abstract class that is used by the other database adapters to enforce a consistent method / interface specification. The general interface includes implementation details for storing the table data in a world setting as well as adding/removing any applications that are rendered as part of the module's operations.</p><p>Available under <code>&lt;api&gt;.databases.Database</code>.</p><p></p><h2>UserFlagDatabase</h2><p>This database adapter uses Foundry's flag system in order to store the row data in the User document, leveraging Foundry's automatic database update propagation to other clients. The application handling and table storage utilizes the abstract implementations.</p><p>Available under <code>&lt;api&gt;.databases.UserFlagDatabase</code>.</p><p></p><h2>MemoryDatabase</h2><p>This database adapter should <strong>not</strong> be used in any actual games, it is intended for development only.</p><p>Available under <code>&lt;api&gt;.databases.MemoryDatabase</code>.</p>"
+        "content": "<p>This is a list of all available database adapters and how they're configured.</p><p></p><h2>Database</h2><p>This database adapter isn't a full adapter, this is an abstract class that is used by the other database adapters to enforce a consistent method / interface specification. The general interface includes implementation details for storing the table data in a world setting as well as adding/removing any applications that are rendered as part of the module's operations.</p><p>Available under <code>&lt;api&gt;.databases.Database</code>.</p><p></p><h2>User Flag Database</h2><p>This database adapter uses Foundry's flag system in order to store the row data in the User document, leveraging Foundry's automatic database update propagation to other clients. The application handling and table storage utilizes the abstract implementations.</p><p>Available under <code>&lt;api&gt;.databases.UserFlagDatabase</code>.</p><p></p><h2>Condensed User Flag Database</h2><p>This is unimplemented at the moment. But it will be a database that makes long-term campaign storage more viable, at the tradeoff of not being able to filter data as granularly.</p><p></p><h2>Memory Database</h2><p>This database adapter should <strong>not</strong> be used in any actual games, it is intended for development only.</p><p>Available under <code>&lt;api&gt;.databases.MemoryDatabase</code>.</p>"
       },
       "video": {
         "controls": true,
@@ -347,10 +309,204 @@
         "systemId": "empty-system",
         "systemVersion": "0.0.0",
         "createdTime": 1748331161024,
-        "modifiedTime": 1748331570983,
+        "modifiedTime": 1748409643379,
         "lastModifiedBy": "t2sWGWEYSMFrfBu3"
       },
       "_key": "!journal.pages!pBOyeBDuTeowuDOE.PcdmuLgNM15h0in1"
+    },
+    {
+      "sort": 1000000,
+      "name": "Graph",
+      "type": "text",
+      "category": "ZPAbuPbVOLWh75hL",
+      "_id": "IXZpEBEJsvOpY3OL",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "ownership": {
+        "default": -1,
+        "t2sWGWEYSMFrfBu3": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.344",
+        "systemId": "empty-system",
+        "systemVersion": "0.0.0",
+        "createdTime": 1748393806045,
+        "modifiedTime": 1748394635911,
+        "lastModifiedBy": "t2sWGWEYSMFrfBu3"
+      },
+      "_key": "!journal.pages!pBOyeBDuTeowuDOE.IXZpEBEJsvOpY3OL"
+    },
+    {
+      "sort": 1100000,
+      "name": "Table Manager",
+      "type": "text",
+      "category": "mrZHFR2i0MYp7aaY",
+      "_id": "Z31C8BPl4ZXDn3R6",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": ""
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "ownership": {
+        "default": -1,
+        "t2sWGWEYSMFrfBu3": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.344",
+        "systemId": "empty-system",
+        "systemVersion": "0.0.0",
+        "createdTime": 1748393919924,
+        "modifiedTime": 1748394635911,
+        "lastModifiedBy": "t2sWGWEYSMFrfBu3"
+      },
+      "_key": "!journal.pages!pBOyeBDuTeowuDOE.Z31C8BPl4ZXDn3R6"
+    },
+    {
+      "sort": 850000,
+      "name": "Enums",
+      "type": "text",
+      "category": "KGdeJUfatQ9v0raI",
+      "_id": "WYaZPgSRDx8L7Zmq",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<h2>Privacy Modes</h2>"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "ownership": {
+        "default": -1,
+        "t2sWGWEYSMFrfBu3": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.344",
+        "systemId": "empty-system",
+        "systemVersion": "0.0.0",
+        "createdTime": 1748394110971,
+        "modifiedTime": 1748394637940,
+        "lastModifiedBy": "t2sWGWEYSMFrfBu3"
+      },
+      "_key": "!journal.pages!pBOyeBDuTeowuDOE.WYaZPgSRDx8L7Zmq"
+    },
+    {
+      "sort": 1000000,
+      "name": "Usage Within Macros",
+      "type": "text",
+      "category": "mrZHFR2i0MYp7aaY",
+      "_id": "cpix3FpMmI1U1xXa",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<p>This module was designed from the ground up with the desire to be able to be used within macros, because of this it has first-class Macro support through the entire API.</p><p></p><h2>Getting the API</h2><p>The primary API that you will interact with inside of macros is held within <code>CONFIG.stats</code>, this is the core API which allows interacting with the stored data however the user wants it to be stored, it allows accessing the apps to view stats, manage the tables, and create new tables.</p><p></p><h2>The API Methods</h2><p>Each of the items within <code>CONFIG.stats</code> has a different purpose, but most of the programmatic interactions for the module are most likely to be interested in the <code>CONFIG.stats.db</code> part of the API, which handles all of the data within the module in your configured preference.</p>"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "ownership": {
+        "default": -1,
+        "t2sWGWEYSMFrfBu3": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.344",
+        "systemId": "empty-system",
+        "systemVersion": "0.0.0",
+        "createdTime": 1748408620967,
+        "modifiedTime": 1748409821925,
+        "lastModifiedBy": "t2sWGWEYSMFrfBu3"
+      },
+      "_key": "!journal.pages!pBOyeBDuTeowuDOE.cpix3FpMmI1U1xXa"
+    },
+    {
+      "sort": 700000,
+      "name": "Database Interface",
+      "type": "text",
+      "category": "KGdeJUfatQ9v0raI",
+      "_id": "PlKHrrb61Uc1sGbN",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<p>This is the interface which all @UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.PcdmuLgNM15h0in1]{Database Adapters} <strong>must</strong> conform to in order for the module to function. If they do not conform to this a warning will be thrown and the module will override the provided database with a database adapter which does nothing, so that the existing data will be protected from errors.</p>"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "ownership": {
+        "default": -1,
+        "t2sWGWEYSMFrfBu3": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.344",
+        "systemId": "empty-system",
+        "systemVersion": "0.0.0",
+        "createdTime": 1748408916163,
+        "modifiedTime": 1748409672979,
+        "lastModifiedBy": "t2sWGWEYSMFrfBu3"
+      },
+      "_key": "!journal.pages!pBOyeBDuTeowuDOE.PlKHrrb61Uc1sGbN"
     }
   ],
   "folder": null,
@@ -392,7 +548,7 @@
       "_key": "!journal.categories!pBOyeBDuTeowuDOE.KGdeJUfatQ9v0raI"
     },
     {
-      "name": "FAQ",
+      "name": "Key Concepts",
       "sort": 200000,
       "_id": "ZPAbuPbVOLWh75hL",
       "flags": {},
@@ -428,7 +584,7 @@
     "systemId": "empty-system",
     "systemVersion": "0.0.0",
     "createdTime": 1748328832096,
-    "modifiedTime": 1748330787690,
+    "modifiedTime": 1748393668194,
     "lastModifiedBy": "t2sWGWEYSMFrfBu3"
   },
   "_key": "!journal!pBOyeBDuTeowuDOE"
