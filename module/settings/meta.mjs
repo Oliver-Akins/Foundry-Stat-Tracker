@@ -23,4 +23,11 @@ export function registerMetaSettings() {
 		config: false,
 		requiresReload: false,
 	});
+
+	game.settings.register(__ID__, `lastVersion`, {
+		scope: `world`,
+		type: String,
+		config: false,
+		requiresReload: false,
+	});
 };

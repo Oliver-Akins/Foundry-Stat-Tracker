@@ -31,4 +31,9 @@ export class NilDatabase extends Database {
 	static async registerListeners() {};
 	static async triggerListeners() {};
 	static async unregisterListeners() {};
+
+	// MARK: Migrations
+	static async canPerformMigration() { return true };
+	static async requiresMigrationFrom() { return false };
+	static async migrateData() {};
 };

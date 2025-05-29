@@ -45,6 +45,7 @@ export default [
 		},
 		languageOptions: {
 			globals: {
+				__TITLE__: `readonly`,
 				__ID__: `readonly`,
 				__VERSION__: `readonly`,
 			},

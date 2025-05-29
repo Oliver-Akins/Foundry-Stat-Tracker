@@ -220,6 +220,43 @@ export class Database {
 	static async triggerListeners() {};
 
 	static async unregisterListeners() {};
+
+	// MARK: Migrations
+	/**
+	 * Determines if the currently authenticated user is capable of running
+	 * the full migration on their own.
+	 *
+	 * @returns {boolean}
+	 */
+	static async canPerformMigration() {
+		// TODO: this *must* account for isActiveGM, because otherwise the
+		// world setting cannot be updated after the migration finishes.
+		return game.user.isActiveGM;
+	};
+
+	/**
+	 * Determines if the previous version of the plugin that was active
+	 * needs to be migrated in order to work with the new version.
+	 *
+	 * @param {string} lastVersion The version that was last active
+	 * @returns {boolean}
+	 */
+	static async requiresMigrationFrom(lastVersion) {
+		return foundry.utils.isNewerVersion(__VERSION__, lastVersion);
+	};
+
+	/**
+	 * This method migrates ALL of the database data from one version of
+	 * the module to the currently installed module. This is not guaranteed
+	 * to run only on one client, so it should be made to be either
+	 * idempotent, or have an operation locking mechanism that can prevent
+	 * other clients from executing it if there's a migration in-progress.
+	 *
+	 * @param {string} lastVersion The last version that the user had active
+	 * @param {Notification} notif The progress bar notification used for
+	 * user feedback while performing migrations.
+	 */
+	static async migrateData(lastVersion, notif) {};
 };
 
 /* eslint-enable no-unused-vars */

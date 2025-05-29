@@ -80,6 +80,7 @@ export default defineConfig(({ mode }) => {
 	return {
 		plugins,
 		define: {
+			__TITLE__: JSON.stringify(manifest.title),
 			__ID__: JSON.stringify(manifest.id),
 			__VERSION__: JSON.stringify(manifest.version),
 		},
