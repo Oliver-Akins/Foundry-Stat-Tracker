@@ -94,7 +94,7 @@
       "image": {},
       "text": {
         "format": 1,
-        "content": "<p>Rows make up the vast majority of data that the stat tracker stores. Every dice roll, or custom entry, is saved as a single row.</p><p>Each row consists of the following data:</p><ul><li><p>The value (e.g. the result of a single dice roll)</p></li><li><p>A timestamp of when it was added to the database</p></li><li><p>A privacy mode (one for each of the Foundry-provided roll modes, see @UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.WYaZPgSRDx8L7Zmq#privacy-modes]{Privacy Modes})</p></li><li><p>An identifier</p></li></ul><blockquote><p>This combination of data can end up becoming a lot of data to load when opening Foundry, if you don't think you'll be resetting the data very often, please consider checking out the different @UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.PcdmuLgNM15h0in1]{Database Adapters} and picking one of them that is most suitable for your campaign.</p></blockquote>"
+        "content": "<p>Rows make up the vast majority of data that the stat tracker stores. Every dice roll, or custom entry, is saved as a single row.</p><p>Each row consists of the following data:</p><ul><li><p>The value (e.g. the result of a single dice roll)</p></li><li><p>A timestamp of when it was added to the database</p></li><li><p>A privacy mode (one for each of the Foundry-provided roll modes, see @UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.WYaZPgSRDx8L7Zmq#privacy-modes]{Privacy Modes})</p></li><li><p>An identifier</p></li></ul><blockquote><p>This combination of data can end up becoming a lot of data to load when opening Foundry, if you don't think you'll be resetting the data very often, please consider checking out the different @UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.PcdmuLgNM15h0in1]{Database Adapters} and picking one of them that is more suitable for your campaign.</p></blockquote>"
       },
       "video": {
         "controls": true,
@@ -114,7 +114,7 @@
         "systemId": "empty-system",
         "systemVersion": "0.0.0",
         "createdTime": 1748329454864,
-        "modifiedTime": 1748394635911,
+        "modifiedTime": 1748497975724,
         "lastModifiedBy": "t2sWGWEYSMFrfBu3"
       },
       "_key": "!journal.pages!pBOyeBDuTeowuDOE.S7Z6mZ0JablJVQJu"
@@ -133,7 +133,7 @@
       "image": {},
       "text": {
         "format": 1,
-        "content": ""
+        "content": "<p>A bucket is the term used to identify a group of allowed values within a @UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.ugzCCxQskUSYMZR4]{table}, each bucket must have a type, and a number of additional settings depending on what type it is.</p><p></p><h2>String Buckets</h2><p>This is the most simple type of bucket, it allows a string to be added as the row's value. The only additional configuration for this type of bucket is restricting what strings can be added be added.</p><p>e.g. you can limit each row to only have a value of <code>\"Critical Success\"</code>, or <code>\"Critical Failure\"</code> and if someone tries to add <code>\"Apple Sauce\"</code> into the table, it will reject that row.</p><p></p><h2>Number Buckets</h2><p>This type of bucket is likely the one you will utilize the most, it allows storing any number. It accepts an set of additional options described below, all of which are optional.</p><table><tbody><tr><td data-colwidth=\"128\"><p>Setting</p></td><td><p>Description</p></td></tr><tr><td data-colwidth=\"128\"><p>Minimum</p></td><td><p>The minimum allowed value</p></td></tr><tr><td data-colwidth=\"128\"><p>Maximum</p></td><td><p>The maximum allowed value, must be greater than Minimum</p></td></tr><tr><td data-colwidth=\"128\"><p>Step</p></td><td><p><strong>Requires Minimum</strong></p><p>When a step is set it requires each number to be a \"step\" away from the lower one. So if you have a minimum of 2 and a step of 4, the allowed values are: 2, 6, 10, 14, 18, etc.</p></td></tr></tbody></table><p></p><h2>Range Buckets</h2><p>The range bucket is what is used by the auto-generated dice tables, these bucket types use the same options as the @UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.e9FYKidbfFnnTspO#number-buckets]{Number Buckets} but the Minimum/Maximum/Step options are required when the type is range.</p>"
       },
       "video": {
         "controls": true,
@@ -153,7 +153,7 @@
         "systemId": "empty-system",
         "systemVersion": "0.0.0",
         "createdTime": 1748329573212,
-        "modifiedTime": 1748394635911,
+        "modifiedTime": 1748499573438,
         "lastModifiedBy": "t2sWGWEYSMFrfBu3"
       },
       "_key": "!journal.pages!pBOyeBDuTeowuDOE.e9FYKidbfFnnTspO"
@@ -327,7 +327,8 @@
       },
       "image": {},
       "text": {
-        "format": 1
+        "format": 1,
+        "content": "<p>Right now all graphs are bar graphs and non-configurable. This is coming in a later update.</p>"
       },
       "video": {
         "controls": true,
@@ -347,7 +348,7 @@
         "systemId": "empty-system",
         "systemVersion": "0.0.0",
         "createdTime": 1748393806045,
-        "modifiedTime": 1748394635911,
+        "modifiedTime": 1748499640505,
         "lastModifiedBy": "t2sWGWEYSMFrfBu3"
       },
       "_key": "!journal.pages!pBOyeBDuTeowuDOE.IXZpEBEJsvOpY3OL"
