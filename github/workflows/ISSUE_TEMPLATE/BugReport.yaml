@@ -1,0 +1,53 @@
+name: Bug Report
+description: Have a bug to report, use this template!
+labels:
+  - Bug
+body:
+  - type: input
+    id: affected-version
+    attributes:
+      label: Affected Versions
+      description: >-
+        What version(s) of the stat-tracker module are you seeing this bug
+        happen on? If you put "latest" your bug report will be invalidated.
+    validations:
+      required: true
+  - type: input
+    id: system-id
+    attributes:
+      label: Game System
+      description: >-
+        What game system are you using the module with when you encounter the
+        bug?
+      placeholder: dnd5e
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: >-
+        Describe the bug you're encountering, the more detail you provide the
+        better.
+    validations:
+      required: true
+  - type: checkboxes
+    id: affected-environments
+    attributes:
+      label: Affected Environments
+      description: How are you accessing Foundry when you encounter this bug?
+      options:
+        - label: Desktop App
+          required: false
+        - label: Chrome
+          required: false
+        - label: Firefox
+          required: false
+  - type: textarea
+    id: support-summary
+    attributes:
+      label: Support Data
+      description: >-
+        Please open the settings tab in Foundry's sidebar, click "Support &
+        Issues", then press "Copy Report to Clipboard" and then paste that text
+        into the box below
