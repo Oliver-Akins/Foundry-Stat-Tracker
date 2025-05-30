@@ -37,9 +37,37 @@ const { deleteProperty, diffObject, expandObject, mergeObject } = foundry.utils;
  * consistency across databases.
  */
 export class Database {
+	// MARK: Permissions
+	/**
+	 * Indicates whether the authenticated user has permission and is able to
+	 * create tables with the specific database implementation. (because tables
+	 * are stored as world settings by default, this checks if the user is a GM)
+	 */
+	static canCreateTables() {
+		return game.user.isGM;
+	};
+
+	/**
+	 * Indicates whether the authenticated user has permission and is able to
+	 * edit tables with the specific database implementation. (because tables
+	 * are stored as world settings by default, this checks if the user is a GM)
+	 */
+	static canEditTables() {
+		return game.user.isGM;
+	};
+
+	/**
+	 * Indicates whether the authenticated user has permission and is able to
+	 * delete tables with the specific database implementation. (because tables
+	 * are stored as world settings by default, this checks if the user is a GM)
+	 */
+	static canDeleteTables() {
+		return game.user.isGM;
+	};
+
 	// MARK: Table Ops
 	static async createTable(tableConfig) {
-		if (!game.user.isGM) {
+		if (!this.canCreateTables()) {
 			ui.notifications.error(`You do not have the required permission to create a new table`);
 			return false;
 		};
@@ -98,6 +126,11 @@ export class Database {
 	};
 
 	static async updateTable(tableID, changes) {
+		if (!this.canEditTables()) {
+			ui.notifications.error(`You don't have the required permission to edit tables`);
+			return false;
+		};
+
 		const table = this.getTable(tableID);
 		if (!tables[tableID]) {
 			ui.notifications.error(`Cannot update table that doesn't exist`);
@@ -136,7 +169,7 @@ export class Database {
 	};
 
 	static async deleteTable(tableID) {
-		if (!game.user.isGM) {
+		if (!this.canDeleteTables()) {
 			ui.notifications.error(`You do not have the required permission to delete a table`);
 			return false;
 		};

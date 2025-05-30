@@ -44,8 +44,10 @@ export class StatSidebar extends HandlebarsApplicationMixin(AbstractSidebarTab) 
 			// manageData: { label: `Manage Data`, action: `` },
 		};
 
-		if (!game.user.isGM) {
+		if (!db.canCreateTables()) {
 			delete controls.createTable;
+		};
+		if (!db.canEditTables()) {
 			delete controls.manageTables;
 		};
 
@@ -55,7 +57,6 @@ export class StatSidebar extends HandlebarsApplicationMixin(AbstractSidebarTab) 
 		// 	delete controls.manageData;
 		// };
 
-		Hooks.callAll(`${__ID__}.getStatsSidebarControls`, controls);
 		ctx.controls = Object.values(controls);
 
 		return ctx;
