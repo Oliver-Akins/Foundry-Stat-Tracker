@@ -11,7 +11,7 @@ export function registerWorldSettings() {
 		type: Boolean,
 		config: true,
 		default: true,
-		requiresReload: true,
+		requiresReload: false,
 	});
 
 	game.settings.register(__ID__, `globalAPI`, {
