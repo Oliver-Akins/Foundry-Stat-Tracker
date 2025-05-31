@@ -109,6 +109,7 @@ export class TableCreator extends HandlebarsApplicationMixin(ApplicationV2) {
 		this.render();
 	};
 
+	/** @this {TableCreator} */
 	static async #createTable() {
 		/** @type {string} */
 		const name = this._name;
@@ -122,25 +123,38 @@ export class TableCreator extends HandlebarsApplicationMixin(ApplicationV2) {
 			return;
 		};
 
+		let created = false;
 		if (name.startsWith(`Dice`)) {
 			if (!name.match(diceNamespacePattern)) {
 				ui.notifications.error(`Table name doesn't conform to the "Dice/dX" format required by the Dice namespace.`);
 				return;
 			};
 			const size = Number(name.replace(`Dice/d`, ``));
-			await CONFIG.stats.db.createTable(createDiceTable(size));
-			return;
-		};
+			created = await CONFIG.stats.db.createTable(createDiceTable(size));
+			if (created) {
+				this.close();
+				ui.notifications.remove(this.#diceNamespaceAlert);
+				this.#diceNamespaceAlert = null;
+			};
+		} else {
+			created = await CONFIG.stats.db.createTable({
+				name,
+				buckets: {
+					type: this._type,
+				},
+				graph: {
+					type: `bar`,
+					stacked: true,
+				},
+			});
+		}
 
-		await CONFIG.stats.db.createTable({
-			name,
-			buckets: {
-				type: this._type,
-			},
-			graph: {
-				type: `bar`,
-				stacked: true,
-			},
-		});
+		if (created) {
+			this.close();
+			if (this.#diceNamespaceAlert) {
+				ui.notifications.remove(this.#diceNamespaceAlert);
+				this.#diceNamespaceAlert = null;
+			};
+		};
 	};
 };
