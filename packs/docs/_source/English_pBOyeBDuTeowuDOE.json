@@ -55,7 +55,7 @@
       "image": {},
       "text": {
         "format": 1,
-        "content": "<p>Tables are quite close to being a \"container\" for every piece of data within the module, every @UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.S7Z6mZ0JablJVQJu]{row} within the module must be associated with a particular table. The table is responsible for maintaining all of the @UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.e9FYKidbfFnnTspO]{bucket} and @UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.IXZpEBEJsvOpY3OL]{graph} configurations, controlling what data is allowed to be saved and how to represent that data.</p><p>You can manage almost all tables within the module by using the @UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.Z31C8BPl4ZXDn3R6]{Table Manager}.</p>"
+        "content": "<p>Tables are quite close to being a \"container\" for every piece of data within the module, every @UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.S7Z6mZ0JablJVQJu]{row} within the module must be associated with a particular table. The table is responsible for maintaining all of the @UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.e9FYKidbfFnnTspO]{bucket} and @UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.IXZpEBEJsvOpY3OL]{graph} configurations, controlling what data is allowed to be saved and how to represent that data.</p><p></p><h2>Subtables</h2><p>Subtables are a concept used to group multiple tables together in a logical way, taking the <code>Dice/d10</code> table as an example, the \"table ID\" is the full <code>\"Dice/d10\"</code>, while the table name is <code>\"Dice\"</code> and the subtable name is <code>\"d10\"</code>. This allows the module to group all of the \"Dice\" tables together in the user interfaces.</p><p></p><h2>Limitations</h2><ul><li><p>Subtables can only go one level deep (e.g. <code>Table/SubTable/SubSubTable</code> is an invalid table ID and the module will reject it)</p></li><li><p>Subtables within the \"Dice\" table cannot be edited, they are required to use a @UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.e9FYKidbfFnnTspO#range-buckets]{Range Bucket} and the settings are locked. This is because the module makes certain assumptions about the subtables within that space adhering to those requirements and making changes to them causes some issues. If you want to make a table that doesn't conform to those requirements, you can make a new table for your own purposes though!</p></li></ul>"
       },
       "video": {
         "controls": true,
@@ -75,7 +75,7 @@
         "systemId": "empty-system",
         "systemVersion": "0.0.0",
         "createdTime": 1748329356680,
-        "modifiedTime": 1748394635911,
+        "modifiedTime": 1748658060472,
         "lastModifiedBy": "t2sWGWEYSMFrfBu3"
       },
       "_key": "!journal.pages!pBOyeBDuTeowuDOE.ugzCCxQskUSYMZR4"
@@ -211,7 +211,7 @@
       "image": {},
       "text": {
         "format": 1,
-        "content": "<p>The module provides a bunch of settings to be able to control how it interacts with Foundry in various ways. Each setting has a description provided in the settings configuration window, but these descriptions will go more in depth than the ones in there.</p><p></p><h2>Roll Auto-Tracking</h2><p>This tells the module to automatically track rolls that are sent to the chat, this includes systems, modules, and other rolls like RollTables. As long as it gets sent to the chat, this will allow that roll to automatically be tracked.</p><p>By default, this only tracks the standard dice sizes (d4, d6, d8, d10, d12, d20, d100), however you can add any dice size you want by creating a new table named <code>Dice/dX</code> where <code>X</code> is the number of sides the dice should have (e.g. for a 3-sided dice you would make the table name be <code>Dice/d3</code>). By adding a table in this way, it's configuration will be locked for editing and the only way to change it will be to delete the table entirely.</p><p>For most systems you will want to leave this setting enabled, because otherwise there is a chance that no dice rolls will be tracked at all unless the system has specifically implemented an integration with the module.</p><p></p><h2>Global API</h2><p>This setting is primarily targeted at users who would like to integrate stats tracking into macros, as it exposes a globally available <code>stats</code> variable with references to all of the exposed methods and utility helpers of the module. This can sometimes cause conflicts with systems or other modules, so make sure that there isn't already another a global variable named stats before enabling this setting.</p><p>Below is an example of how to retrieve the module's API both with and without this setting enabled:</p><pre><code>// with it enabled:\nconst statViewer = new stats.Apps.StatsViewer;\nstatViewer.render({ force: true });\n\n// with it disabled\nconst api = game.modules.get(`stat-tracker`)?.api;\nconst statViewer = new api.Apps.StatsViewer;\nstatViewer?.render({ force: true });</code></pre><p></p><h2>Stats Sidebar Tab</h2><p></p>"
+        "content": "<p>The module provides a bunch of settings to be able to control how it interacts with Foundry in various ways. Each setting has a description provided in the settings configuration window, but these descriptions will go more in depth than the ones in there. This will not include all settings, just the ones that would be more beneficial to have additional clarification for.</p><p></p><h2>Roll Auto-Tracking</h2><p>This tells the module to automatically track rolls that are sent to the chat, this includes systems, modules, and other rolls like RollTables. As long as it gets sent to the chat, this will allow that roll to automatically be tracked.</p><p>By default, this only tracks the standard dice sizes (d4, d6, d8, d10, d12, d20, d100), however you can add any dice size you want by creating a new table named <code>Dice/dX</code> where <code>X</code> is the number of sides the dice should have (e.g. for a 3-sided dice you would make the table name be <code>Dice/d3</code>). By adding a table in this way, it's configuration will be locked for editing and the only way to change it will be to delete the table entirely.</p><p>For most systems you will want to leave this setting enabled, because otherwise there is a chance that no dice rolls will be tracked at all unless the system has specifically implemented an integration with the module.</p><p></p><h2>Global API</h2><p>This setting is primarily targeted at users who would like to integrate stats tracking into macros, as it exposes a globally available <code>stats</code> variable with references to all of the exposed methods and utility helpers of the module. This can sometimes cause conflicts with systems or other modules, so make sure that there isn't already another a global variable named stats before enabling this setting.</p><p>Below is an example of how to retrieve the module's API both with and without this setting enabled:</p><pre><code>// with it enabled:\nconst statViewer = new stats.Apps.StatsViewer;\nstatViewer.render({ force: true });\n\n// with it disabled\nconst api = game.modules.get(`stat-tracker`)?.api;\nconst statViewer = new api.Apps.StatsViewer;\nstatViewer?.render({ force: true });</code></pre>"
       },
       "video": {
         "controls": true,
@@ -231,7 +231,7 @@
         "systemId": "empty-system",
         "systemVersion": "0.0.0",
         "createdTime": 1748330762378,
-        "modifiedTime": 1748582414432,
+        "modifiedTime": 1748658920308,
         "lastModifiedBy": "t2sWGWEYSMFrfBu3"
       },
       "_key": "!journal.pages!pBOyeBDuTeowuDOE.UuAWTQtd3QMKOWvU"
@@ -406,7 +406,7 @@
       "image": {},
       "text": {
         "format": 1,
-        "content": "<h2>Privacy Modes</h2>"
+        "content": "<p>All of these enums are available within &lt;api&gt;.enums, they are read-only and cannot be modified by other plugins.</p><p></p><h2>Privacy Modes</h2><p>This enum is used by the module to specify all of the privacy levels that it uses.</p><p>The valid values are:</p><ul><li><p><code>GM</code> - Representing that only gamemasters and assistant gamemasters will be able to see this data entry. This mode is similar to the \"Blind GM Roll\" roll mode.</p></li><li><p><code>PRIVATE</code> - Indicating that this is a piece of private data, that only gamemasters, assistant gamemasters, and the user who owns the piece of data will be able to see it.</p></li><li><p><code>SELF</code> - Similar to the \"GM\" level, but instead of gamemasters, it's only the user who owns the piece of data that's able to see it.</p></li><li><p><code>PUBLIC</code> - Everyone can see it.</p></li></ul>"
       },
       "video": {
         "controls": true,
@@ -426,7 +426,7 @@
         "systemId": "empty-system",
         "systemVersion": "0.0.0",
         "createdTime": 1748394110971,
-        "modifiedTime": 1748394637940,
+        "modifiedTime": 1748657380240,
         "lastModifiedBy": "t2sWGWEYSMFrfBu3"
       },
       "_key": "!journal.pages!pBOyeBDuTeowuDOE.WYaZPgSRDx8L7Zmq"
@@ -484,7 +484,7 @@
       "image": {},
       "text": {
         "format": 1,
-        "content": "<p>This is the interface which all @UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.PcdmuLgNM15h0in1]{Database Adapters} <strong>must</strong> conform to in order for the module to function. If they do not conform to this a warning will be thrown and the module will override the provided database with a database adapter which does nothing, so that the existing data will be protected from errors.</p>"
+        "content": "<p>This is the interface which all @UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.PcdmuLgNM15h0in1]{Database Adapters} <strong>must</strong> conform to in order for the module to function. If they do not conform to this a warning will be thrown and the module will override the provided database with a database adapter which does nothing, so that the existing data will be protected from errors.</p><p>The best way to learn about the required database interface is to read the <a href=\"https://github.com/Oliver-Akins/Foundry-Stat-Tracker/blob/main/module/utils/databases/Database.mjs\">implementation of the interface</a> that all database adapters are required to extend.</p>"
       },
       "video": {
         "controls": true,
@@ -504,7 +504,7 @@
         "systemId": "empty-system",
         "systemVersion": "0.0.0",
         "createdTime": 1748408916163,
-        "modifiedTime": 1748409672979,
+        "modifiedTime": 1748656904440,
         "lastModifiedBy": "t2sWGWEYSMFrfBu3"
       },
       "_key": "!journal.pages!pBOyeBDuTeowuDOE.PlKHrrb61Uc1sGbN"
