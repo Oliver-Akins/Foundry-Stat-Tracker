@@ -68,7 +68,11 @@ function buildPacks() {
 	return {
 		async writeBundle(options) {
 			const buildDir = options.dir;
-			await buildCompendia();
+			try {
+				await buildCompendia();
+			} catch {
+				throw new Error(`Compendium building failed, make sure Foundry isn't running`);
+			};
 			await cp(`${__dirname}/packs`, `${buildDir}/packs`, { recursive: true, force: true });
 			for (const file of glob.sync(`${buildDir}/packs/**/_source/`)) {
 				await rm(file, { recursive: true, force: true });
