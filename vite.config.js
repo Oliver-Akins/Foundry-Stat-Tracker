@@ -98,13 +98,12 @@ export default defineConfig(({ mode }) => {
 		outMode = `dev`;
 	};
 
-	const plugins = [
-		copyFile(`LICENSE`, `LICENSE`),
-		copyFile(`README.md`, `README.md`),
-	];
+	const plugins = [];
 
 	if (isProd) {
 		plugins.push(
+			copyFile(`LICENSE`, `LICENSE`),
+			copyFile(`README.md`, `README.md`),
 			buildPacks(),
 		);
 	} else {
