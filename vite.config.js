@@ -142,7 +142,6 @@ export default defineConfig(({ mode }) => {
 			rollupOptions: {
 				input: {
 					module: `./module/main.mjs`,
-					// TODO: Figure out how to get handlebars files being used here
 				},
 				output: {
 					entryFileNames: `[name].mjs`,
