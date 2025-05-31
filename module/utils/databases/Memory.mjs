@@ -117,6 +117,10 @@ export class MemoryDatabase extends Database {
 		return true;
 	};
 
+	static async deleteTable(tableID) {
+		return delete this.#tables[tableID];
+	};
+
 	static async createRow(table, userID, row, { rerender = true } = {}) {
 		if (!this.#tables[table]) { return };
 		this.#rows[userID] ??= {};
