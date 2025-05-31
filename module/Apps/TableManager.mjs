@@ -4,7 +4,7 @@ import { filePath } from "../consts.mjs";
 import { Logger } from "../utils/Logger.mjs";
 import { smallToLarge } from "../utils/sorters/smallToLarge.mjs";
 
-const { HandlebarsApplicationMixin, ApplicationV2 } = foundry.applications.api;
+const { HandlebarsApplicationMixin, ApplicationV2, DialogV2 } = foundry.applications.api;
 const { isEmpty } = foundry.utils;
 
 export class TableManager extends HandlebarsApplicationMixin(ApplicationV2) {
@@ -24,6 +24,12 @@ export class TableManager extends HandlebarsApplicationMixin(ApplicationV2) {
 			contentClasses: [`st-scrollable`],
 			controls: [
 				// Add action for deleting the table
+				{
+					icon: `fa-solid fa-trash`,
+					label: `Delete Selected Table`,
+					action: `deleteTable`,
+					visible: () => CONFIG.stats.db.canDeleteTables(),
+				},
 			],
 		},
 		position: {
@@ -35,7 +41,9 @@ export class TableManager extends HandlebarsApplicationMixin(ApplicationV2) {
 			closeOnSubmit: false,
 			handler: this.#submit,
 		},
-		actions: {},
+		actions: {
+			deleteTable: this.#deleteTable,
+		},
 	};
 
 	static PARTS = {
@@ -238,6 +246,33 @@ export class TableManager extends HandlebarsApplicationMixin(ApplicationV2) {
 			return;
 		}
 		await CONFIG.stats.db.updateTable(this.activeTableID, formData.object);
+	};
+
+	/**
+	 * @this {TableManager}
+	 */
+	static async #deleteTable() {
+		const table = await CONFIG.stats.db.getTable(this.activeTableID);
+		Logger.debug({ table });
+		if (!table) {
+			ui.notifications.error(
+				`You must select a table before you can delete it`,
+				{ console: false },
+			);
+			return;
+		};
+
+		const confirmed = await DialogV2.confirm({
+			window: {
+				title: `Confirm Deletion`,
+			},
+			content: `<p>Are you sure you want to delete the table: <code>${this.activeTableID}</code></p>`,
+		});
+		if (!confirmed) { return };
+
+		CONFIG.stats.db.deleteTable(this.activeTableID);
+		this._selectedTable = null;
+		this.render();
 	};
 	// #endregion Actions
 };
