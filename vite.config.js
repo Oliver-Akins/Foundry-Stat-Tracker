@@ -1,6 +1,8 @@
 /* eslint-disable no-undef */
 
+import { cp, rm } from "fs/promises";
 import { readFileSync, symlinkSync } from "fs";
+import { buildCompendia } from "./scripts/buildCompendia.mjs";
 import { defineConfig } from "vite";
 import { glob } from "glob";
 import path from "path";
@@ -46,15 +48,32 @@ The intent of this plugin is to handle the symlinking of the compendium packs
 so that they can modified during dev without needing to worry about the rebuild
 destroying the in-progress compendia data.
 */
-function handlePacks() {
+function symlinkPacks() {
 	return {
 		writeBundle(options) {
-			console.log(options.dir);
 			symlinkSync(
 				path.resolve(__dirname, `packs`),
 				`${options.dir}/packs`,
 				`dir`,
 			);
+		},
+	};
+};
+
+/*
+The intent of this plugin is to handle the copying, cleaning and compiling of
+compendia packs for production
+*/
+function buildPacks() {
+	return {
+		async writeBundle(options) {
+			// console.log(options);
+			const buildDir = options.dir;
+			await buildCompendia();
+			await cp(`${__dirname}/packs`, `${buildDir}/packs`, { recursive: true, force: true });
+			for (const file of glob.sync(`${buildDir}/packs/**/_source/`)) {
+				await rm(file, { recursive: true, force: true });
+			};
 		},
 	};
 };
@@ -65,9 +84,13 @@ export default defineConfig(({ mode }) => {
 
 	const plugins = [];
 
-	if (!isProd) {
+	if (isProd) {
 		plugins.push(
-			handlePacks(),
+			buildPacks(),
+		);
+	} else {
+		plugins.push(
+			symlinkPacks(),
 			watcher(
 				`./public`,
 			),

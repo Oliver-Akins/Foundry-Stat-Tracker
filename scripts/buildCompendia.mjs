@@ -2,14 +2,16 @@ import { existsSync } from "fs";
 import { readFile } from "fs/promises";
 import { join } from "path";
 import { compilePack } from "@foundryvtt/foundryvtt-cli";
+import { pathToFileURL } from "url";
 
-async function main() {
+export async function buildCompendia() {
 	const manifest = JSON.parse(await readFile(`./public/module.json`, `utf-8`));
 
 	if (!manifest.packs || manifest.packs.length === 0) {
 		console.log(`No compendium packs defined`);
 		process.exit(0);
 	};
+	console.log(`Packing compendia`);
 
 	for (const compendium of manifest.packs) {
 		console.debug(`Packing ${compendium.label} (${compendium.name})`);
@@ -29,4 +31,6 @@ async function main() {
 	console.log(`Finished packing compendia`)
 };
 
-main();
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+	buildCompendia();
+};
