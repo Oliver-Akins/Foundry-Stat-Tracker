@@ -25,10 +25,10 @@ export async function buildCompendia() {
 			join(process.cwd(), compendium.path),
 			{ recursive: true },
 		);
-		console.debug(`Finished packing ${compendium.name}`);
+		console.debug(`Finished packing compendium: ${compendium.name}`);
 	};
 
-	console.log(`Finished packing compendia`)
+	console.log(`Finished packing all compendia`)
 };
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {

@@ -19,10 +19,10 @@ export async function extractCompendia() {
 			src,
 			{ recursive: true },
 		);
-		console.debug(`Finished packing ${compendium.name}`);
+		console.debug(`Finished unpacking compendium: ${compendium.name}`);
 	};
 
-	console.log(`Finished unpacking compendia`);
+	console.log(`Finished unpacking all compendia`);
 };
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
