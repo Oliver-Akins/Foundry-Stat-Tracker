@@ -261,7 +261,7 @@ export class Database {
 	 *
 	 * @returns {boolean}
 	 */
-	static async canPerformMigration() {
+	static canPerformMigration() {
 		// TODO: this *must* account for isActiveGM, because otherwise the
 		// world setting cannot be updated after the migration finishes.
 		return game.user.isActiveGM;
@@ -274,7 +274,7 @@ export class Database {
 	 * @param {string} lastVersion The version that was last active
 	 * @returns {boolean}
 	 */
-	static async requiresMigrationFrom(lastVersion) {
+	static requiresMigrationFrom(lastVersion) {
 		return foundry.utils.isNewerVersion(__VERSION__, lastVersion);
 	};
 
