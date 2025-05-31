@@ -92,7 +92,11 @@ function copyFile(filepath, targetPath) {
 
 // MARK: config
 export default defineConfig(({ mode }) => {
-	const isProd = mode === `prod`;
+	const isProd = [`prod`, `staging`].includes(mode);
+	let outMode = mode;
+	if (mode === `staging`) {
+		outMode = `dev`;
+	};
 
 	const plugins = [
 		copyFile(`LICENSE`, `LICENSE`),
@@ -125,6 +129,10 @@ export default defineConfig(({ mode }) => {
 		mode: isProd ? `production` : `development`,
 		build: {
 			minify: isProd ? `terser` : false,
+			terserOptions: {
+				keep_classnames: true,
+				keep_fnames: true,
+			},
 			sourcemap: true,
 			rollupOptions: {
 				input: {
@@ -136,7 +144,7 @@ export default defineConfig(({ mode }) => {
 					format: `esm`,
 				},
 			},
-			outDir: `${mode}.dist`,
+			outDir: `${outMode}.dist`,
 			emptyOutDir: true,
 		},
 	};

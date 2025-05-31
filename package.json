@@ -7,8 +7,8 @@
     "lint:nofix": "eslint",
     "dev": "NODE_ENV=development vite build --mode dev --watch",
     "dev:once": "NODE_ENV=development vite build --mode dev",
-    "staging": "NODE_ENV=staging vite build --mode dev --watch",
-    "staging:once": "NODE_ENV=staging vite build --mode dev",
+    "staging": "NODE_ENV=staging vite build --mode staging --watch",
+    "staging:once": "NODE_ENV=staging vite build --mode staging",
     "build": "NODE_ENV=production vite build --mode prod"
   },
   "devDependencies": {
