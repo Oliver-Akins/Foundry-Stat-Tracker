@@ -213,8 +213,6 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 			this._privacySetting,
 		);
 
-		Logger.log(userData);
-
 		const data = {};
 		const allBuckets = new Set();
 
@@ -281,7 +279,6 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 				}),
 			},
 		};
-		console.log(`graphData`, this._graphData);
 	};
 	// #endregion Data Prep
 
