@@ -131,8 +131,8 @@ export class Database {
 			return false;
 		};
 
-		const table = this.getTable(tableID);
-		if (!tables[tableID]) {
+		const table = await this.getTable(tableID);
+		if (!table) {
 			ui.notifications.error(`Cannot update table that doesn't exist`);
 			return false;
 		};
@@ -144,7 +144,7 @@ export class Database {
 		const diff = diffObject(
 			table,
 			expandObject(changes),
-			{ inner: true, deletionKeys: true },
+			{ deletionKeys: true },
 		);
 		if (Object.keys(diff).length === 0) { return false };
 
