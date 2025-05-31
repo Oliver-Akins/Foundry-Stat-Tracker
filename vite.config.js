@@ -71,7 +71,9 @@ function buildPacks() {
 			try {
 				await buildCompendia();
 			} catch {
-				throw new Error(`Compendium building failed, make sure Foundry isn't running`);
+				const err = new Error(`Compendium building failed, make sure Foundry isn't running`);
+				err.stack = ``;
+				throw err;
 			};
 			await cp(`${__dirname}/packs`, `${buildDir}/packs`, { recursive: true, force: true });
 			for (const file of glob.sync(`${buildDir}/packs/**/_source/`)) {
