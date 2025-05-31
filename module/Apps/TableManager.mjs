@@ -210,7 +210,7 @@ export class TableManager extends HandlebarsApplicationMixin(ApplicationV2) {
 	};
 
 	async _prepareStringContext(ctx, table) {
-		ctx.buckets.choices = [...table.buckets.choices];
+		ctx.buckets.choices = [...(table.buckets.choices ?? [])];
 	};
 	// #endregion Data Prep
 
