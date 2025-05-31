@@ -264,6 +264,11 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 						stacked: table.graph?.stacked ?? false,
 					},
 				},
+				plugins: {
+					legend: {
+						onClick: null,
+					},
+				},
 			},
 			data: {
 				labels: sortedBucketNames,
