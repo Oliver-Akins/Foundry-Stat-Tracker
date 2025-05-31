@@ -52,8 +52,7 @@ export function validateBucketConfig(config) {
 
 	const validator = validators[conf.type];
 	if (validator == null) {
-		Logger.error(`Failed to find type validator for: ${conf.type}`);
-		return false;
+		throw new Error(`Failed to find type validator for: ${conf.type}`);
 	};
 
 	// Disallow function choices if present
