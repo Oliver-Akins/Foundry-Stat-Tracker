@@ -38,6 +38,9 @@ jobs:
         id: manifest-update
         run: cat prod.dist/module.temp.json | jq -r --tab '.download = "https://github.com/${{ github.repository }}/releases/download/v${{ steps.version.outputs.version }}/release.zip"' > prod.dist/module.json
 
+      - name: Delete temp files from build
+        run: rm prod.dist/*.temp.*
+
       - name: Create the zip
         run: cd prod.dist; zip -r release.zip *
 
