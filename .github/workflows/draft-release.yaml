@@ -39,7 +39,7 @@ jobs:
         run: cat prod.dist/module.temp.json | jq -r --tab '.download = "https://github.com/${{ github.repository }}/releases/download/v${{ steps.version.outputs.version }}/release.zip"' > prod.dist/module.json
 
       - name: Create the zip
-        run: zip -r release.zip prod.dist/*
+        run: cd prod.dist; zip -r release.zip *
 
       - name: Create the draft release
         uses: ncipollo/release-action@v1
@@ -48,4 +48,4 @@ jobs:
           commit: ${{ github.ref }}
           draft: true
           generateReleaseNotes: true
-          artifacts: "release.zip,prod.dist/module.json"
+          artifacts: "prod.dist/release.zip,prod.dist/module.json"
