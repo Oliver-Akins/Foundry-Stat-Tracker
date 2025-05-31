@@ -18,7 +18,7 @@ jobs:
 
       - name: Reading the system.json for the version
         id: "version"
-        run: cat prod.dist/system.json | echo version=`jq -r ".version"` >> "$GITHUB_OUTPUT"
+        run: cat prod.dist/module.json | echo version=`jq -r ".version"` >> "$GITHUB_OUTPUT"
 
       # Check that tag doesn't exist
       - uses: mukunku/tag-exists-action@v1.5.0
