@@ -67,7 +67,6 @@ compendia packs for production
 function buildPacks() {
 	return {
 		async writeBundle(options) {
-			// console.log(options);
 			const buildDir = options.dir;
 			await buildCompendia();
 			await cp(`${__dirname}/packs`, `${buildDir}/packs`, { recursive: true, force: true });
@@ -78,11 +77,27 @@ function buildPacks() {
 	};
 };
 
+/*
+Allows copying a file from somewhere into the build directory once the build has
+completed.
+*/
+function copyFile(filepath, targetPath) {
+	return {
+		async writeBundle(options) {
+			const buildDir = options.dir;
+			await cp(filepath, `${buildDir}/${targetPath}`);
+		},
+	};
+};
+
 // MARK: config
 export default defineConfig(({ mode }) => {
 	const isProd = mode === `prod`;
 
-	const plugins = [];
+	const plugins = [
+		copyFile(`LICENSE`, `LICENSE`),
+		copyFile(`README.md`, `README.md`),
+	];
 
 	if (isProd) {
 		plugins.push(
