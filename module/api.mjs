@@ -11,7 +11,7 @@ import { UserFlagDatabase } from "./utils/databases/UserFlag.mjs";
 
 // Utils
 import { barGraphSchema, numberBucketSchema, rowSchema, stringBucketSchema, tableSchema } from "./utils/databases/model.mjs";
-import { filterPrivateRows, PrivacyMode } from "./utils/privacy.mjs";
+import { determinePrivacyFromRollMode, filterPrivateRows, PrivacyMode } from "./utils/privacy.mjs";
 import { validateBucketConfig, validateValue } from "./utils/buckets.mjs";
 
 const { deepFreeze } = foundry.utils;
@@ -24,6 +24,7 @@ export const api = deepFreeze({
 		TableManager,
 	},
 	utils: {
+		determinePrivacyFromRollMode,
 		filterPrivateRows,
 		validateValue,
 		validateBucketConfig,
