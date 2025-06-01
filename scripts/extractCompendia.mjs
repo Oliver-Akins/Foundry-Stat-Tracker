@@ -1,6 +1,7 @@
 import { readFile } from "fs/promises";
 import { join } from "path";
 import { extractPack } from "@foundryvtt/foundryvtt-cli";
+import { pathToFileURL } from "url";
 
 export async function extractCompendia() {
 	const manifest = JSON.parse(await readFile(`./public/module.json`, `utf-8`));
