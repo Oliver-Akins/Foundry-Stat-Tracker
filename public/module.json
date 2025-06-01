@@ -1,7 +1,7 @@
 {
 	"id": "stat-tracker",
 	"title": "Stats Tracker",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"compatibility": {
 		"maximum": 13,
 		"verified": 13,
