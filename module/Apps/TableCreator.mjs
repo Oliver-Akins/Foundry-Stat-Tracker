@@ -104,7 +104,6 @@ export class TableCreator extends HandlebarsApplicationMixin(ApplicationV2) {
 			return;
 		};
 
-		Logger.log(`updating ${binding} value to ${target.value}`);
 		this[binding] = target.value;
 		this.render();
 	};

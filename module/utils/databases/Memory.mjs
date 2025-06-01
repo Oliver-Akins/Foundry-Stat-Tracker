@@ -1,7 +1,6 @@
 import { filterPrivateRows, PrivacyMode } from "../privacy.mjs";
 import { createDiceTable } from "./utils.mjs";
 import { Database } from "./Database.mjs";
-import { Logger } from "../Logger.mjs";
 import { validateBucketConfig } from "../buckets.mjs";
 
 const { deleteProperty, diffObject, expandObject, mergeObject, randomID } = foundry.utils;
@@ -130,7 +129,6 @@ export class MemoryDatabase extends Database {
 		row._id ||= randomID();
 		row.timestamp = new Date().toISOString();
 
-		Logger.debug(`Adding row:`, row);
 		this.#rows[userID][table].push(row);
 		if (rerender) {
 			this.render({ userUpdated: userID });

@@ -253,7 +253,6 @@ export class TableManager extends HandlebarsApplicationMixin(ApplicationV2) {
 	 */
 	static async #deleteTable() {
 		const table = await CONFIG.stats.db.getTable(this.activeTableID);
-		Logger.debug({ table });
 		if (!table) {
 			ui.notifications.error(
 				`You must select a table before you can delete it`,

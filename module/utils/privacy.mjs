@@ -31,7 +31,6 @@ export function determinePrivacyFromRollMode(rollMode) {
  * @returns The filtered rows
  */
 export function filterPrivateRows(rows, userID, privacies) {
-	console.log({rows, userID, privacies});
 	const filtered = [];
 
 	const isMe = userID === game.user.id;
