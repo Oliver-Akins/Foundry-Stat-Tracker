@@ -2,6 +2,7 @@ import { filterPrivateRows, PrivacyMode } from "../privacy.mjs";
 import { Database } from "./Database.mjs";
 import { Logger } from "../Logger.mjs";
 import { rowSchema } from "./model.mjs";
+import { validateValue } from "../buckets.mjs";
 
 const { hasProperty, mergeObject, randomID } = foundry.utils;
 
@@ -46,6 +47,9 @@ export class UserFlagDatabase extends Database {
 		const userData = user.getFlag(__ID__, dataFlag) ?? {};
 		userData[tableID] ??= [];
 
+		let valueErrorPosted = false;
+		let validationErrorPosted = false;
+
 		for (const row of rows) {
 			row._id = randomID();
 			row.timestamp = new Date().toISOString();
@@ -55,9 +59,28 @@ export class UserFlagDatabase extends Database {
 				{ abortEarly: false, convert: true, dateFormat: `iso`, render: false },
 			);
 			if (error) {
-				ui.notifications.error(`A row being created did not conform to required schema, see console for more information.`, { console: false });
+				if (!validationErrorPosted) {
+					ui.notifications.error(
+						`One or more rows being created did not conform to required schema, skipping row and see console for more information.`,
+						{ console: false },
+					);
+					validationErrorPosted = true;
+				};
 				Logger.error(`Failing row:`, row);
 				Logger.error(error);
+				continue;
+			};
+
+			const validValue = validateValue(corrected.value, table.buckets);
+			if (!validValue) {
+				if (!valueErrorPosted) {
+					ui.notifications.warn(
+						`One or more rows being created did not contain a valid value, skipping row and see console for more information.`,
+						{ console: false },
+					);
+					valueErrorPosted = true;
+				};
+				Logger.warn(`Row with invalid value:`, row);
 				continue;
 			};
 
@@ -100,22 +123,36 @@ export class UserFlagDatabase extends Database {
 		const table = await this.getTable(tableID);
 		if (!table) {
 			Logger.error(`Cannot find the table with ID "${tableID}"`);
-			return;
+			return false;
 		};
 
 		const user = game.users.get(userID);
 		if (!user) {
 			Logger.error(`Can't find the user with ID "${tableID}"`);
-			return;
+			return false;
 		};
 
 		const userData = user.getFlag(__ID__, dataFlag) ?? {};
 		let row = userData[tableID]?.find(row => row._id === rowID);
-		if (!row) { return };
+		if (!row) { return false };
+
+		if (hasProperty(changes, `value`)) {
+			const validValue = validateValue(changes.value, table.buckets);
+			if (!validValue) {
+				ui.notifications.warn(
+					`One or more rows being created did not contain a valid value, skipping row and see console for more information.`,
+					{ console: false },
+				);
+				Logger.warn(`Row with invalid value:`, row);
+				return false;
+			};
+		};
+
 		mergeObject(row, changes);
 		await user.setFlag(__ID__, dataFlag, userData);
 		this.render({ userUpdated: userID });
 		this.triggerListeners();
+		return true;
 	};
 
 	static async deleteRow(tableID, userID, rowID) {
