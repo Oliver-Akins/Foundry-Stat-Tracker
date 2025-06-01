@@ -50,5 +50,7 @@ jobs:
           tag: "v${{ steps.version.outputs.version }}"
           commit: ${{ github.ref }}
           draft: true
+          body: "This version can be installed using this manifest URL: https://github.com/Oliver-Akins/Foundry-Stat-Tracker/releases/download/v${{ steps.version.outputs.version }}/module.json"
           generateReleaseNotes: true
           artifacts: "prod.dist/release.zip,prod.dist/module.json"
+          artifactsErrorsFailBuild: true
