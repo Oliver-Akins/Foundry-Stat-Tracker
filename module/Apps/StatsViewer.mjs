@@ -21,10 +21,10 @@ export class StatsViewer extends HandlebarsApplicationMixin(ApplicationV2) {
 			resizable: true,
 			minimizable: true,
 			controls: [
-				{
-					label: `Add All Users To Graph`,
-					action: `addAllUsers`,
-				},
+				// {
+				// 	label: `Add All Users To Graph`,
+				// 	action: `addAllUsers`,
+				// },
 			],
 		},
 		position: {
