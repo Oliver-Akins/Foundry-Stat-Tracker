@@ -3,31 +3,25 @@ import { PrivacyMode } from "../privacy.mjs";
 
 // MARK: Buckets
 export const numberBucketSchema = Joi.object({
-	type: Joi.string().valid(`number`, `range`).required(),
+	type: Joi.string().valid(`number`).required(),
 	min: Joi
 		.number()
 		.integer()
-		.when(`type`, {
-			is: Joi.string().valid(`range`),
+		.when(`step`, {
+			is: Joi.exist(),
 			then: Joi.required(),
-			otherwise: Joi.optional(),
 		}),
 	max: Joi
 		.number()
 		.integer()
-		.when(`type`, {
-			is: Joi.string().valid(`range`),
-			then: Joi.required(),
-			otherwise: Joi.optional(),
+		.when(`min`, {
+			is: Joi.exist(),
+			then: Joi.number().greater(Joi.ref(`min`)),
 		}),
 	step: Joi
 		.number()
 		.integer()
-		.when(`type`, {
-			is: Joi.string().valid(`range`),
-			then: Joi.required(),
-			otherwise: Joi.optional(),
-		}),
+		.min(1),
 });
 
 export const stringBucketSchema = Joi.object({
@@ -37,16 +31,15 @@ export const stringBucketSchema = Joi.object({
 		.items(
 			Joi.string().trim().invalid(``),
 		)
+		.min(1)
 		.optional(),
 });
 
 // MARK: Graphs
 export const barGraphSchema = Joi.object({
 	type: Joi.string().valid(`bar`).required(),
-	stacked: Joi
-		.boolean()
-		.default(true)
-		.optional(),
+	stacked: Joi.boolean().optional().default(true),
+	showEmptyBuckets: Joi.boolean().optional().default(false),
 });
 
 // MARK: Table
@@ -59,18 +52,34 @@ export const tableSchema = Joi.object({
 		.pattern(/^[0-9a-z \-_]+(\/[0-9a-z \-_]+)?$/i),
 	buckets: Joi
 		.alternatives()
-		.try(
-			numberBucketSchema,
-			stringBucketSchema,
+		.conditional(
+			`/buckets.type`,
+			{
+				switch: [
+					{
+						is: `number`,
+						then: numberBucketSchema,
+					},
+					{
+						is: `string`,
+						then: stringBucketSchema,
+					},
+				],
+				otherwise: Joi.forbidden(),
+			},
 		)
-		.match(`one`)
 		.required(),
 	graph: Joi
 		.alternatives()
-		.try(
-			barGraphSchema,
+		.conditional(
+			`/graph.type`,
+			{
+				switch: [
+					{ is: `bar`, then: barGraphSchema },
+				],
+				otherwise: Joi.forbidden(),
+			},
 		)
-		.match(`one`)
 		.required(),
 });
 
