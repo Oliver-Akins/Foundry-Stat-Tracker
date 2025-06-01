@@ -27,7 +27,7 @@ export class UserFlagDatabase extends Database {
 			return false;
 		};
 
-		const userData = user.getFlag(__ID__, dataFlag);
+		const userData = user.getFlag(__ID__, dataFlag) ?? {};
 		userData[tableID] ??= [];
 		userData[tableID].push(corrected);
 		await user.setFlag(__ID__, dataFlag, userData);
@@ -146,7 +146,6 @@ export class UserFlagDatabase extends Database {
 		if (this.#listener !== null) { return };
 
 		this.#listener = Hooks.on(`updateUser`, (doc, diff, options, userID) => {
-			Logger.debug({ diff, userID, doc });
 			// Shortcircuit when on the client that triggered the update
 			if (userID === game.user.id) { return };
 			if (!hasProperty(diff, `flags.${__ID__}.${dataFlag}`)) { return };
