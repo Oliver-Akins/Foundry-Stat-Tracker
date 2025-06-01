@@ -2,7 +2,7 @@ export function createDiceTable(size) {
 	return {
 		name: `Dice/d${size}`,
 		buckets: {
-			type: `range`,
+			type: `number`,
 			min: 1,
 			max: size,
 			step: 1,
@@ -10,6 +10,7 @@ export function createDiceTable(size) {
 		graph: {
 			type: `bar`,
 			stacked: true,
+			showEmptyBuckets: true,
 		},
 	};
 };

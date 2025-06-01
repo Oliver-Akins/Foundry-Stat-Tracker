@@ -38,7 +38,6 @@ export const api = deepFreeze({
 	},
 	schemas: {
 		buckets: {
-			range: numberBucketSchema,
 			number: numberBucketSchema,
 			string: stringBucketSchema,
 		},

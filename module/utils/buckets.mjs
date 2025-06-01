@@ -61,7 +61,7 @@ export function validateBucketConfig(config) {
 		delete conf.choices;
 	};
 
-	validator.validateConfig(conf);
+	validator.validateConfig?.(conf);
 
 	return conf;
 };
@@ -74,7 +74,7 @@ const validators = {
 			opts.trim = true;
 			opts.blank = false;
 		},
-		validateConfig: (config) => {
+		transformConfig: (config) => {
 			if (config.choices.length === 0) {
 				delete config.choices;
 				config[`-=choices`] = null;
@@ -84,35 +84,6 @@ const validators = {
 	[BucketTypes.NUMBER]: {
 		field: NumberField,
 		transformOptions: transformNumberFieldOptions,
-		validateConfig: (config) => {
-			if (config.step != null && config.min == null) {
-				delete config.step;
-				config[`-=step`] = null;
-			};
-			if (
-				config.min != null
-				&& config.max != null
-				&& config.min > config.max
-			) {
-				throw new Error(`"min" must be less than "max"`);
-			}
-		},
-	},
-	[BucketTypes.RANGE]: {
-		field: NumberField,
-		transformOptions: transformNumberFieldOptions,
-		validateConfig: (config) => {
-			if (config.min == null) {
-				throw new Error(`"min" must be defined for range buckets`);
-			};
-			if (config.max == null) {
-				throw new Error(`"max" must be defined for range buckets`);
-			};
-			if (config.min > config.max) {
-				throw new Error(`"min" must be less than "max"`);
-			}
-			config.step ??= 1;
-		},
 	},
 };
 
