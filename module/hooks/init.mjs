@@ -47,9 +47,9 @@ Hooks.on(`init`, () => {
 		manager: TableManager,
 	};
 
-	if (import.meta.env.DEV) {
-		CONFIG.stats.db = MemoryDatabase;
-	};
+	// if (import.meta.env.DEV) {
+	// 	CONFIG.stats.db = MemoryDatabase;
+	// };
 
 	game.modules.get(__ID__).api = api;
 	if (game.settings.get(__ID__, `globalAPI`)) {

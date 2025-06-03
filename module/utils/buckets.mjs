@@ -6,7 +6,6 @@ const { StringField, NumberField } = foundry.data.fields;
 export const BucketTypes = {
 	STRING: `string`,
 	NUMBER: `number`,
-	RANGE: `range`,
 };
 
 /**

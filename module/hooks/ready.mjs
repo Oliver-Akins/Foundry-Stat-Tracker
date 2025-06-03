@@ -29,10 +29,10 @@ Hooks.on(`ready`, () => {
 			);
 
 			// Fire and forget
-			CONFIG.stats.db.migrateData(notif)
+			CONFIG.stats.db.migrateData(lastVersion, notif)
 				.then(() => {
 					game.settings.set(__ID__, `lastVersion`, __VERSION__);
-					setTimeout(() => ui.notifications.remove(notif), 500);
+					setTimeout(() => ui.notifications.remove(notif), 5_000);
 				});
 		} else {
 			ui.notifications.error(
