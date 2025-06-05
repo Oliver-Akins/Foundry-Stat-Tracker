@@ -75,7 +75,7 @@ export class TableCreator extends HandlebarsApplicationMixin(ApplicationV2) {
 		if (this._name.startsWith(`Dice`)) {
 			ctx.createButtonDisabled = !this._name.match(diceNamespacePattern);
 			ctx.typeDisabled = true;
-			ctx.type = BucketTypes.RANGE;
+			ctx.type = BucketTypes.NUMBER;
 			this.#diceNamespaceAlert ??= ui.notifications.info(
 				`Tables in the "Dice" namespace must be formatted as "Dice/dX" where X is the number of sides on the die and are restricted to be ranges 1 to X.`,
 				{ permanent: true },

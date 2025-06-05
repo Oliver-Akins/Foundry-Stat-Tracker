@@ -28,7 +28,7 @@ Default Subtables:
 	tables that are parents to other tables.
 */
 
-const { deleteProperty, diffObject, expandObject, mergeObject } = foundry.utils;
+const { deleteProperty, diffObject, expandObject, isNewerVersion, mergeObject } = foundry.utils;
 
 /**
  * The generic Database implementation, any subclasses should implement all of
@@ -275,7 +275,7 @@ export class Database {
 	 * @returns {boolean}
 	 */
 	static requiresMigrationFrom(lastVersion) {
-		return foundry.utils.isNewerVersion(__VERSION__, lastVersion);
+		return isNewerVersion(__VERSION__, lastVersion);
 	};
 
 	/**
@@ -289,7 +289,27 @@ export class Database {
 	 * @param {Notification} notif The progress bar notification used for
 	 * user feedback while performing migrations.
 	 */
-	static async migrateData(lastVersion, notif) {};
+	static async migrateData(lastVersion, notif) {
+		const totalSteps = 1;
+
+		/*
+		This migration is for going up to 1.0.3, getting rid of any tables that have
+		a bucket type of range, since those were not supported within the initial
+		release, but could still accidentally be created by users.
+		*/
+		if (isNewerVersion(`1.0.3`, lastVersion)) {
+			Logger.log(`Migrating up to the v1.0.3 data structure`);
+			const tables = game.settings.get(__ID__, `tables`);
+			for (const table of Object.values(tables)) {
+				if (table.buckets.type !== `range`) { continue };
+				table.buckets.type = BucketTypes.NUMBER;
+				table.buckets.showEmptyBuckets = true;
+			};
+			await game.settings.set(__ID__, `tables`, tables);
+			notif.update({ pct: notif.pct + (1 / totalSteps) });
+		};
+
+	};
 };
 
 /* eslint-enable no-unused-vars */
