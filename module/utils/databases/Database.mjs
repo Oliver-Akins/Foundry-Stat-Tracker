@@ -275,10 +275,6 @@ export class Database {
 	 * @returns {boolean}
 	 */
 	static requiresMigrationFrom(lastVersion) {
-		Logger.table({
-			lastVersion,
-			newer: isNewerVersion(__VERSION__, lastVersion),
-		});
 		return isNewerVersion(__VERSION__, lastVersion);
 	};
 
@@ -295,7 +291,6 @@ export class Database {
 	 */
 	static async migrateData(lastVersion, notif) {
 		const totalSteps = 1;
-		Logger.debug(lastVersion);
 
 		/*
 		This migration is for going up to 1.0.3, getting rid of any tables that have
