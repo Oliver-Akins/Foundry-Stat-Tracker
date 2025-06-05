@@ -1,6 +1,7 @@
 {
 	"id": "stat-tracker",
 	"title": "Stats Tracker",
+	"description": "<p>A user-first approach to stat tracking. Designed from the ground up with the intent of being able to track whatever statistics you want.</p>",
 	"version": "1.0.3",
 	"compatibility": {
 		"maximum": 13,
