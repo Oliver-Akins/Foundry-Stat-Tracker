@@ -50,7 +50,13 @@ jobs:
           tag: "v${{ steps.version.outputs.version }}"
           commit: ${{ github.ref }}
           draft: true
-          body: "This version can be installed using this manifest URL: https://github.com/Oliver-Akins/Foundry-Stat-Tracker/releases/download/v${{ steps.version.outputs.version }}/module.json"
+          body: >
+            | <img aria-hidden="true" src="https://img.shields.io/github/downloads/Oliver-Akins/Foundry-Stat-Tracker/v${{ steps.version.outputs.version }}/release.zip?style=flat-square&color=%2300aa00">
+            |
+            | ### Changes:
+            | -
+            |
+            | This version can be installed using this manifest URL: https://github.com/Oliver-Akins/Foundry-Stat-Tracker/releases/download/v${{ steps.version.outputs.version }}/module.json
           generateReleaseNotes: true
           artifacts: "prod.dist/release.zip,prod.dist/module.json"
           artifactsErrorsFailBuild: true
