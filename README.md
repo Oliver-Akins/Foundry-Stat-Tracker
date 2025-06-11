@@ -13,7 +13,7 @@ compendium within your world!
 
 ## Installation
 <img aria-hidden="true" src="https://img.shields.io/github/v/release/Oliver-Akins/Foundry-Stat-Tracker?sort=semver&style=flat-square&label=Latest%20Stable%20Release&color=%23070">
-<img aria-hidden="true" src="https://img.shields.io/github/v/release/Oliver-Akins/Foundry-Stat-Tracker?include_prereleases&sort=semver&style=flat-square&color=%23800&label=Latest Prerelease">
+<img aria-hidden="true" src="https://img.shields.io/github/v/release/Oliver-Akins/Foundry-Stat-Tracker?include_prereleases&sort=semver&style=flat-square&color=%23800&label=Latest%20Prerelease">
 
 You can find a history of all releases on the [Foundry package listing](https://foundryvtt.com/packages/stat-tracker)
 or in the [GitHub releases tab](https://github.com/Oliver-Akins/Foundry-Stat-Tracker/releases).
