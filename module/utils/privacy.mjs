@@ -11,6 +11,8 @@ export const PrivacyMode = Object.freeze({
 
 export function determinePrivacyFromRollMode(rollMode) {
 	switch (rollMode) {
+		case CONST.DICE_ROLL_MODES.PUBLIC:
+			return PrivacyMode.PUBLIC;
 		case CONST.DICE_ROLL_MODES.BLIND:
 			return PrivacyMode.GM;
 		case CONST.DICE_ROLL_MODES.PRIVATE:
@@ -18,7 +20,7 @@ export function determinePrivacyFromRollMode(rollMode) {
 		case CONST.DICE_ROLL_MODES.SELF:
 			return PrivacyMode.SELF;
 	}
-	return PrivacyMode.PUBLIC;
+	return PrivacyMode.SELF;
 };
 
 /**
