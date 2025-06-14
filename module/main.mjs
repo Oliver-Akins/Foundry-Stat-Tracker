@@ -5,7 +5,7 @@ import "./hooks/init.mjs";
 import "./hooks/ready.mjs";
 
 // Document Hooks
-import "./hooks/preCreateChatMessage.mjs";
+import "./hooks/createChatMessage.mjs";
 
 // Dev Only imports
 if (import.meta.env.DEV) {

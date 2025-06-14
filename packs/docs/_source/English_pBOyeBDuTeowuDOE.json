@@ -250,7 +250,7 @@
       "image": {},
       "text": {
         "format": 1,
-        "content": "<p>The module provides a multitude of utility functions through it's API for usage however desired. This will go over them and describe their purpose.</p><p></p><h2>filterPrivateRows</h2><p>This method is intended to take @UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.S7Z6mZ0JablJVQJu]{rows} provided by the database and filter out any that the user would not be able to see normally. This is usually called by the database adapters so there's unlikely to be any reason to use it externally.</p><p>Available under <code>&lt;api&gt;.utils.filterPrivateRows</code>.</p><p></p><h2>validateValue</h2><p>Available under <code>&lt;api&gt;.utils.validateValue</code>.</p><p></p><h2>validateBucketConfig</h2><p>Available under <code>&lt;api&gt;.utils.validateBucketConfig</code>.</p>"
+        "content": "<p>The module provides a multitude of utility functions through it's API for usage however desired. This will go over them and describe their purpose.</p><p></p><h2>filterPrivateRows</h2><p>This method is intended to take @UUID[Compendium.stat-tracker.docs.JournalEntry.pBOyeBDuTeowuDOE.JournalEntryPage.S7Z6mZ0JablJVQJu]{rows} provided by the database and filter out any that the user would not be able to see normally. This is usually called by the database adapters so there's unlikely to be any reason to use it externally.</p><p>Available under <code>&lt;api&gt;.utils.filterPrivateRows</code>.</p><p></p><h2>inferRollMode</h2><p>This utility is intended to try and determine what roll mode was used to create a chat message. The inference is not entirely accurate because it struggles to differentiate between a GM rolling with a Private GM Roll and a Self Roll when there is only one GM present in the world.</p><p>Available under <code>&lt;api&gt;.utils.inferRollMode</code></p><p></p><h2>validateValue</h2><p>Available under <code>&lt;api&gt;.utils.validateValue</code>.</p><p></p><h2>validateBucketConfig</h2><p>Available under <code>&lt;api&gt;.utils.validateBucketConfig</code>.</p>"
       },
       "video": {
         "controls": true,
@@ -266,11 +266,11 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "13.344",
+        "coreVersion": "13.345",
         "systemId": "empty-system",
         "systemVersion": "0.0.0",
         "createdTime": 1748330904988,
-        "modifiedTime": 1748394635911,
+        "modifiedTime": 1749864406851,
         "lastModifiedBy": "t2sWGWEYSMFrfBu3"
       },
       "_key": "!journal.pages!pBOyeBDuTeowuDOE.TQzWrVTEz4oQhLPD"
