@@ -2,7 +2,6 @@ import { determinePrivacyFromRollMode } from "../utils/privacy.mjs";
 import { inferRollMode } from "../utils/inferRollMode.mjs";
 
 Hooks.on(`createChatMessage`, (message, options, author) => {
-	console.log({ message, options, author});
 	const isSelf = author === game.user.id;
 	const isNew = options.action === `create`;
 	const hasRolls = message.rolls?.length > 0;
