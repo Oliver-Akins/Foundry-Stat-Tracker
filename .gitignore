@@ -17,6 +17,8 @@ lerna-debug.log*
 node_modules
 /*.dist
 *.local
+.env
+/foundry
 
 # Editor directories and files
 .vscode/*
